@@ -1,15 +1,51 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { projects, categories } from "@/data/projects";
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ProjectsSection = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-  const filteredProjects = activeCategory === "All"
-    ? projects.filter(p => p.featured)
-    : projects.filter(p => p.featured && p.category === activeCategory);
+/* ================= TYPES ================= */
+type Service = {
+  id: string;
+  title: string;
+};
+
+type Project = {
+  id: string;
+  slug: string;
+  title: string;
+  client: string;
+  featured: boolean;
+  services: { service: Service }[];
+};
+
+/* ================= COMPONENT ================= */
+const ProjectsSection = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [activeService, setActiveService] = useState("All");
+
+  /* ================= FETCH ================= */
+  useEffect(() => {
+    Promise.all([
+      fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/services`).then((r) => r.json()),
+    ]).then(([projectsData, servicesData]) => {
+      setProjects(projectsData.filter((p: Project) => p.featured));
+      setServices(servicesData);
+    });
+  }, []);
+
+  /* ================= FILTER ================= */
+  const filteredProjects =
+    activeService === "All"
+      ? projects
+      : projects.filter((project) =>
+          project.services.some(
+            (s) => s.service.title === activeService
+          )
+        );
 
   const projectColors = [
     "from-cyan-500 to-blue-500",
@@ -23,7 +59,8 @@ const ProjectsSection = () => {
   return (
     <section className="section-padding relative overflow-hidden bg-card/50">
       <div className="container-wide">
-        {/* Header */}
+
+        {/* ================= HEADER ================= */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -39,7 +76,7 @@ const ProjectsSection = () => {
             </h2>
           </motion.div>
 
-          {/* Category Filter */}
+          {/* ================= SERVICE FILTER ================= */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -47,23 +84,34 @@ const ProjectsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="flex flex-wrap gap-2"
           >
-            {categories.slice(0, 5).map((category) => (
+            <button
+              onClick={() => setActiveService("All")}
+              className={`px-4 py-2 rounded-full text-xs font-medium ${
+                activeService === "All"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary hover:bg-secondary/80"
+              }`}
+            >
+              All
+            </button>
+
+            {services.slice(0, 5).map((service) => (
               <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 rounded-full text-xs font-medium tracking-wide transition-all ${
-                  activeCategory === category
+                key={service.id}
+                onClick={() => setActiveService(service.title)}
+                className={`px-4 py-2 rounded-full text-xs font-medium ${
+                  activeService === service.title
                     ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    : "bg-secondary hover:bg-secondary/80"
                 }`}
               >
-                {category}
+                {service.title}
               </button>
             ))}
           </motion.div>
         </div>
 
-        {/* Projects Grid */}
+        {/* ================= GRID ================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredProjects.map((project, index) => (
             <motion.div
@@ -76,34 +124,35 @@ const ProjectsSection = () => {
             >
               <Link to={`/projects/${project.slug}`} className="block">
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-card border border-border">
-                  {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${projectColors[index % projectColors.length]} opacity-20 group-hover:opacity-30 transition-opacity`} />
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-500">
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${
+                      projectColors[index % projectColors.length]
+                    } opacity-20 group-hover:opacity-30 transition-opacity`}
+                  />
+
+                  <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center scale-0 group-hover:scale-100 transition-transform">
                       <ArrowUpRight className="w-6 h-6 text-primary-foreground" />
                     </div>
                   </div>
 
-                  {/* Category Badge */}
+                  {/* Service Badge */}
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium">
-                      {project.category}
+                    <span className="px-3 py-1 rounded-full bg-background/80 text-xs font-medium">
+                      {project.services[0]?.service.title}
                     </span>
                   </div>
                 </div>
 
-                {/* Project Info */}
                 <div className="mt-6">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-display font-semibold group-hover:text-primary transition-colors">
+                    <h3 className="text-xl font-display font-semibold group-hover:text-primary">
                       {project.title}
                     </h3>
-                    <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary" />
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    {project.clientName}
+                    {project.client}
                   </p>
                 </div>
               </Link>
@@ -111,7 +160,7 @@ const ProjectsSection = () => {
           ))}
         </div>
 
-        {/* View All CTA */}
+        {/* ================= CTA ================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

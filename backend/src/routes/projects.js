@@ -1,6 +1,23 @@
-// Projects Routes
-// GET /api/projects - Get all projects
-// GET /api/projects/:slug - Get project by slug
-// POST /api/projects - Create project (Admin)
-// PUT /api/projects/:id - Update project (Admin)
-// DELETE /api/projects/:id - Delete project (Admin)
+const express = require("express");
+const router = express.Router();
+
+const {
+  getAllProjects,
+  getProjectBySlug,
+  createProject,
+  updateProject,
+  deleteProject,
+} = require("../controllers/projectController");
+
+/* ================= ROUTES ================= */
+
+router.get("/", getAllProjects);
+
+// ⚠️ slug route MUST be before :id
+router.get("/slug/:slug", getProjectBySlug);
+
+router.post("/", createProject);
+router.put("/:id", updateProject);
+router.delete("/:id", deleteProject);
+
+module.exports = router;
