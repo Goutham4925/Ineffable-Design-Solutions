@@ -29,6 +29,7 @@ app.use("/api/services", require("./routes/services"));
 app.use("/api/upload", require("./routes/upload"));
 app.use("/api/projects", require("./routes/projects"));
 app.use("/api/contact", require("./routes/contact"));
+app.use("/api/team", require("./routes/team"));
 
 // app.use("/api/testimonials", require("./routes/testimonials"));
 // app.use("/api/stats", require("./routes/stats"));
