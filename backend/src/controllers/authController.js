@@ -27,7 +27,17 @@ exports.login = async (req, res, next) => {
       { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    // ✅ SEND ADMIN DATA TOO
+    res.json({
+      token,
+      admin: {
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        approved: admin.approved,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -49,7 +59,7 @@ exports.signup = async (req, res, next) => {
         name,
         email,
         password: hashed,
-        approved: false, // 🔐 important
+        approved: false,
       },
     });
 

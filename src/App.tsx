@@ -27,7 +27,7 @@ import AdminTeam from "./pages/admin/Team";
 import AdminTestimonials from "./pages/admin/Testimonials";
 import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
-import AdminUsers from "./pages/admin/Users"; // approval page
+import AdminUsers from "./pages/admin/Users";
 
 const queryClient = new QueryClient();
 
@@ -67,7 +67,16 @@ const App = () => (
             <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="settings" element={<AdminSettings />} />
-            <Route path="users" element={<AdminUsers />} /> {/* approve admins */}
+
+            {/* 🔐 SUPER ADMIN ONLY */}
+            <Route
+              path="users"
+              element={
+                <RequireAuth role="SUPER_ADMIN">
+                  <AdminUsers />
+                </RequireAuth>
+              }
+            />
           </Route>
 
           {/* ================= FALLBACK ================= */}

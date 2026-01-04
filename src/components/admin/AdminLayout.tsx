@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
@@ -15,6 +14,7 @@ import {
 import { useState } from "react";
 import Logo from "@/components/Logo";
 
+/* ================= SIDEBAR LINKS ================= */
 const sidebarLinks = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Services", href: "/admin/services", icon: FileText },
@@ -28,11 +28,21 @@ const sidebarLinks = [
 
 const AdminLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  /* ================= LOGOUT ================= */
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // JWT
+    localStorage.removeItem("admin_role"); // optional
+
+    setIsSidebarOpen(false);
+    navigate("/admin/login", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile Sidebar Toggle */}
+      {/* ================= MOBILE TOGGLE ================= */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-card border border-border"
@@ -40,7 +50,7 @@ const AdminLayout = () => {
         {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Sidebar */}
+      {/* ================= SIDEBAR ================= */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border transform transition-transform duration-300 lg:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -49,7 +59,11 @@ const AdminLayout = () => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-border">
-            <Link to="/admin" className="flex items-center gap-3">
+            <Link
+              to="/admin"
+              className="flex items-center gap-3"
+              onClick={() => setIsSidebarOpen(false)}
+            >
               <Logo className="h-8 w-auto" />
               <span className="font-display font-semibold">Admin</span>
             </Link>
@@ -58,7 +72,11 @@ const AdminLayout = () => {
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1">
             {sidebarLinks.map((link) => {
-              const isActive = location.pathname === link.href;
+              const isActive =
+                link.href === "/admin"
+                  ? location.pathname === "/admin"
+                  : location.pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
@@ -77,20 +95,20 @@ const AdminLayout = () => {
             })}
           </nav>
 
-          {/* Footer */}
+          {/* ================= FOOTER / LOGOUT ================= */}
           <div className="p-4 border-t border-border">
-            <Link
-              to="/"
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
             >
               <LogOut className="w-5 h-5" />
-              Back to Site
-            </Link>
+              Logout
+            </button>
           </div>
         </div>
       </aside>
 
-      {/* Overlay */}
+      {/* ================= MOBILE OVERLAY ================= */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm lg:hidden"
@@ -98,7 +116,7 @@ const AdminLayout = () => {
         />
       )}
 
-      {/* Main Content */}
+      {/* ================= MAIN CONTENT ================= */}
       <main className="lg:pl-64">
         <div className="min-h-screen p-6 lg:p-8">
           <Outlet />
