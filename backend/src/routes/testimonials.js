@@ -1,5 +1,19 @@
-// Testimonials Routes
-// GET /api/testimonials - Get all testimonials
-// POST /api/testimonials - Create testimonial (Admin)
-// PUT /api/testimonials/:id - Update testimonial (Admin)
-// DELETE /api/testimonials/:id - Delete testimonial (Admin)
+const router = require("express").Router();
+const requireAuth = require("../middleware/requireAuth");
+
+const {
+  getTestimonials,
+  createTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+} = require("../controllers/testimonialController");
+
+/* ================= PUBLIC ================= */
+router.get("/", getTestimonials);
+
+/* ================= ADMIN ================= */
+router.post("/", requireAuth, createTestimonial);
+router.put("/:id", requireAuth, updateTestimonial);
+router.delete("/:id", requireAuth, deleteTestimonial);
+
+module.exports = router;
