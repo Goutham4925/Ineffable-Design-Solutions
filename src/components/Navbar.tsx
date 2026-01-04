@@ -68,7 +68,7 @@ const Navbar = () => {
 
           {/* Right Side - Theme Toggle + CTA */}
           <div className="flex items-center gap-4">
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             
             <Link
               to="/contact"
