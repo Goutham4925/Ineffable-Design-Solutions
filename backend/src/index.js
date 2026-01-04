@@ -1,5 +1,5 @@
 // src/index.js
-// Backend Server Entry Point
+// Backend Server Entry Point (Vercel + Local compatible)
 
 const express = require("express");
 const cors = require("cors");
@@ -9,18 +9,55 @@ require("dotenv").config();
 
 const app = express();
 
-/* ===================== MIDDLEWARE ===================== */
-app.use(cors());
-app.use(helmet());
-app.use(morgan("dev"));
-app.use(express.json());
+/* ===================== CORS CONFIG ===================== */
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "https://ineffable-design-solutions.vercel.app",
+  // add preview URLs if needed:
+  // "https://ineffable-design-solutions-*.vercel.app"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow REST tools & server-to-server calls
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error("CORS not allowed for this origin"),
+        false
+      );
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// REQUIRED for Vercel + browsers
+app.options("*", cors());
+
+/* ===================== SECURITY ===================== */
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+
+/* ===================== CORE MIDDLEWARE ===================== */
+app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
 
 /* ===================== ROUTES ===================== */
 /**
  * IMPORTANT:
- * Only mount routes that are FULLY implemented
- * Otherwise Express will crash with:
- * "Router.use() requires a middleware function but got an Object"
+ * Only mount routes that export express.Router()
  */
 
 app.use("/api/auth", require("./routes/auth"));
@@ -32,20 +69,25 @@ app.use("/api/contact", require("./routes/contact"));
 app.use("/api/team", require("./routes/team"));
 app.use("/api/testimonials", require("./routes/testimonials"));
 app.use("/api/admin/dashboard", require("./routes/adminDashboard"));
-// app.use("/api/stats", require("./routes/stats"));
-// app.use("/api/settings", require("./routes/settings"));
-
 
 /* ===================== HEALTH CHECK ===================== */
 app.get("/", (_, res) => {
-  res.json({ status: "Ineffable backend running 🚀" });
+  res.status(200).json({
+    status: "Ineffable backend running 🚀",
+    environment: process.env.NODE_ENV || "development",
+  });
 });
 
 /* ===================== ERROR HANDLER ===================== */
 app.use(require("./middleware/errorHandler"));
 
-/* ===================== START SERVER ===================== */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+/* ===================== SERVER (LOCAL ONLY) ===================== */
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
+
+/* ===================== EXPORT FOR VERCEL ===================== */
+module.exports = app;
