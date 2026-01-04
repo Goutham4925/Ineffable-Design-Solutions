@@ -4,10 +4,10 @@ import {
   Edit,
   Trash2,
   Search,
-  GripVertical,
-  X,
+  Upload,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -20,9 +20,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
+/* ================= TYPES ================= */
 type Service = {
   id: string;
   slug: string;
@@ -63,9 +63,25 @@ const AdminServices = () => {
   useEffect(() => {
     fetch(`${API_BASE}/api/services`)
       .then((res) => res.json())
-      .then(setServices)
+      .then((data) => setServices(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
   }, []);
+
+  /* ================= CLOUDINARY UPLOAD (SAME AS PROJECTS) ================= */
+  const uploadImage = async (file: File) => {
+    const fd = new FormData();
+    fd.append("images", file); // ✅ IMPORTANT
+
+    const res = await fetch(`${API_BASE}/api/upload`, {
+      method: "POST",
+      body: fd,
+    });
+
+    if (!res.ok) throw new Error("Upload failed");
+
+    const json = await res.json();
+    return json.urls[0];
+  };
 
   /* ================= CREATE / UPDATE ================= */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -114,7 +130,6 @@ const AdminServices = () => {
   /* ================= DELETE ================= */
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this service?")) return;
-
     await fetch(`${API_BASE}/api/services/${id}`, { method: "DELETE" });
     setServices((prev) => prev.filter((s) => s.id !== id));
   };
@@ -134,8 +149,7 @@ const AdminServices = () => {
           </p>
         </div>
 
-        <button
-          className="btn-primary"
+        <Button
           onClick={() => {
             setEditingService(null);
             setForm(emptyForm);
@@ -144,7 +158,7 @@ const AdminServices = () => {
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Service
-        </button>
+        </Button>
       </div>
 
       {/* ================= SEARCH ================= */}
@@ -193,7 +207,7 @@ const AdminServices = () => {
                     <div className="flex gap-4 items-center">
                       <img
                         src={service.image}
-                        className="w-10 h-10 rounded"
+                        className="w-10 h-10 rounded object-cover"
                       />
                       <div>
                         <p className="font-semibold">{service.title}</p>
@@ -245,7 +259,7 @@ const AdminServices = () => {
 
       {/* ================= MODAL ================= */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-display">
               {editingService ? "Edit Service" : "Create Service"}
@@ -253,137 +267,51 @@ const AdminServices = () => {
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* ================= BASIC INFO ================= */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase">
-                Basic Information
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label>Title</Label>
-                  <Input
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label>Slug</Label>
-                  <Input
-                    value={form.slug}
-                    onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    placeholder="software-development"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label>Tagline</Label>
-                <Input
-                  value={form.tagline}
-                  onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-                  required
-                />
-              </div>
+            {/* BASIC INFO */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              <Input placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
             </div>
 
-            {/* ================= CONTENT ================= */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase">
-                Content
-              </h3>
+            <Input placeholder="Tagline" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} />
 
-              <div>
-                <Label>Short Description</Label>
-                <Textarea
-                  rows={3}
-                  value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
-                  required
-                />
-              </div>
+            <Textarea placeholder="Short Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
 
-              <div>
-                <Label>Long Description (Detail Page)</Label>
-                <Textarea
-                  rows={5}
-                  value={form.longDescription}
-                  onChange={(e) =>
-                    setForm({ ...form, longDescription: e.target.value })
-                  }
-                />
-              </div>
+            <Textarea placeholder="Long Description" value={form.longDescription} onChange={(e) => setForm({ ...form, longDescription: e.target.value })} />
 
-              <div>
-                <Label>Features (comma separated)</Label>
-                <Input
-                  value={form.features}
-                  onChange={(e) => setForm({ ...form, features: e.target.value })}
-                  placeholder="API Development, Cloud Architecture, DevOps"
-                  required
+            <Input placeholder="Features (comma separated)" value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} />
+
+            {/* IMAGE UPLOAD */}
+            <div>
+              <Label>Service Image</Label>
+
+              {form.image && (
+                <img
+                  src={form.image}
+                  className="h-32 rounded border mb-2 object-cover"
                 />
-              </div>
+              )}
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  if (!e.target.files?.length) return;
+                  const url = await uploadImage(e.target.files[0]);
+                  setForm({ ...form, image: url });
+                }}
+              />
             </div>
 
-            {/* ================= MEDIA & STYLE ================= */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase">
-                Media & Style
-              </h3>
+            <Input placeholder="Icon" value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} />
+            <Input placeholder="Accent Color" value={form.accentColor} onChange={(e) => setForm({ ...form, accentColor: e.target.value })} />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
-                  <Label>Image URL</Label>
-                  <Input
-                    value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label>Icon</Label>
-                  <Input
-                    value={form.icon}
-                    onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                    placeholder="Code"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label>Accent Color</Label>
-                <Input
-                  value={form.accentColor}
-                  onChange={(e) =>
-                    setForm({ ...form, accentColor: e.target.value })
-                  }
-                  placeholder="service-software"
-                />
-              </div>
-            </div>
-
-            {/* ================= ACTIONS ================= */}
-            <DialogFooter className="pt-6">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsModalOpen(false)}
-              >
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsModalOpen(false)}>
                 Cancel
               </Button>
-
               <Button type="submit" disabled={saving}>
-                {saving
-                  ? "Saving..."
-                  : editingService
-                  ? "Update Service"
-                  : "Create Service"}
+                {saving ? "Saving…" : editingService ? "Update Service" : "Create Service"}
               </Button>
             </DialogFooter>
           </form>
