@@ -28,6 +28,7 @@ import AdminTestimonials from "./pages/admin/Testimonials";
 import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
 import AdminUsers from "./pages/admin/Users";
+import AdminMessages from "./pages/admin/Messages";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,8 @@ const App = () => (
             <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="messages" element={<AdminMessages />} />
+
 
             {/* 🔐 SUPER ADMIN ONLY */}
             <Route

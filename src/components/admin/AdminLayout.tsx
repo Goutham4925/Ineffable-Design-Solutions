@@ -24,6 +24,7 @@ const sidebarLinks = [
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { label: "Settings", href: "/admin/settings", icon: Settings },
   { label: "Users", href: "/admin/users", icon: Users },
+  { label: "Messages", href: "/admin/messages", icon: MessageSquare },
 ];
 
 const AdminLayout = () => {
