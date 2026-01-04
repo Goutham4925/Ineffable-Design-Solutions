@@ -23,6 +23,7 @@ const sidebarLinks = [
   { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Users", href: "/admin/users", icon: Users },
 ];
 
 const AdminLayout = () => {

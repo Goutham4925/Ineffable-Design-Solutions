@@ -23,16 +23,16 @@ app.use(express.json());
  * "Router.use() requires a middleware function but got an Object"
  */
 
-
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/admin-users", require("./routes/adminUsers"));
 app.use("/api/services", require("./routes/services"));
-
 app.use("/api/upload", require("./routes/upload"));
 app.use("/api/projects", require("./routes/projects"));
 // app.use("/api/testimonials", require("./routes/testimonials"));
 // app.use("/api/stats", require("./routes/stats"));
 // app.use("/api/contact", require("./routes/contact"));
 // app.use("/api/settings", require("./routes/settings"));
-// app.use("/api/auth", require("./routes/auth"));
+
 
 /* ===================== HEALTH CHECK ===================== */
 app.get("/", (_, res) => {

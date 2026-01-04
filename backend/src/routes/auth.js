@@ -1,4 +1,9 @@
-// Auth Routes
-// POST /api/auth/login - Admin login
-// POST /api/auth/logout - Admin logout
-// GET /api/auth/me - Get current user
+const router = require("express").Router();
+const authController = require("../controllers/authController");
+
+/* ================= AUTH ================= */
+
+router.post("/login", authController.login);
+router.post("/signup", authController.signup);
+
+module.exports = router;

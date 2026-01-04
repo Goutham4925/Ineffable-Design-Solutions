@@ -115,3 +115,18 @@ model SiteSettings {
   mission   String @db.Text
   vision    String @db.Text
 }
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      AdminRole @default(ADMIN)
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
