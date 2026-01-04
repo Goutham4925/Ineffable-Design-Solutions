@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,10 +22,11 @@ type Project = {
   slug: string;
   title: string;
   client: string;
-  category: string;
   year: string;
+  category: string;
   description: string;
   thumbnail: string;
+  images: string[];
   featured: boolean;
   services?: { serviceId: string }[];
 };
@@ -34,17 +36,30 @@ type Service = {
   title: string;
 };
 
-/* ================= FORM ================= */
-const emptyForm = {
+type ProjectForm = {
+  title: string;
+  slug: string;
+  client: string;
+  year: string;
+  category: string;
+  description: string;
+  thumbnail: string;
+  images: string[];
+  featured: boolean;
+  services: string[];
+};
+
+const emptyForm: ProjectForm = {
   title: "",
   slug: "",
   client: "",
-  category: "",
   year: "",
+  category: "",
   description: "",
   thumbnail: "",
+  images: [],
   featured: false,
-  services: [] as string[],
+  services: [],
 };
 
 export default function AdminProjects() {
@@ -55,7 +70,7 @@ export default function AdminProjects() {
   const [loading, setLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState<ProjectForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -65,20 +80,38 @@ export default function AdminProjects() {
       fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
       fetch(`${API_BASE}/api/services`).then((r) => r.json()),
     ])
-      .then(([projectsData, servicesData]) => {
-        setProjects(projectsData);
-        setServices(servicesData);
+      .then(([p, s]) => {
+        setProjects(p || []);
+        setServices(s || []);
       })
+      .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  /* ================= CLOUDINARY UPLOAD ================= */
+  const uploadImages = async (files: FileList) => {
+    const data = new FormData();
+    Array.from(files).forEach((file) => data.append("images", file));
+
+    const res = await fetch(`${API_BASE}/api/upload`, {
+      method: "POST",
+      body: data,
+    });
+
+    if (!res.ok) {
+      throw new Error("Image upload failed");
+    }
+
+    const json = await res.json();
+    return json.urls as string[];
+  };
 
   /* ================= FILTER ================= */
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
-      const matchesSearch =
-        `${p.title} ${p.client}`
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+      const matchesSearch = `${p.title} ${p.client}`
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
       const matchesService =
         filterService === "all" ||
@@ -90,8 +123,8 @@ export default function AdminProjects() {
 
   /* ================= CREATE / UPDATE ================= */
   const handleSubmit = async () => {
-    if (!form.title || !form.client || !form.year) {
-      alert("Title, Client and Year are required");
+    if (!form.title || !form.client || !form.year || !form.thumbnail) {
+      alert("Title, Client, Year and Thumbnail are required");
       return;
     }
 
@@ -99,6 +132,7 @@ export default function AdminProjects() {
 
     const payload = {
       ...form,
+      images: form.images ?? [],
       slug:
         form.slug ||
         form.title
@@ -107,30 +141,37 @@ export default function AdminProjects() {
           .replace(/(^-|-$)/g, ""),
     };
 
-    const url = editingId
-      ? `${API_BASE}/api/projects/${editingId}`
-      : `${API_BASE}/api/projects`;
+    try {
+      const res = await fetch(
+        editingId
+          ? `${API_BASE}/api/projects/${editingId}`
+          : `${API_BASE}/api/projects`,
+        {
+          method: editingId ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
-    const method = editingId ? "PUT" : "POST";
+      if (!res.ok) throw new Error("Save failed");
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+      const saved = await res.json();
 
-    const saved = await res.json();
+      setProjects((prev) =>
+        editingId
+          ? prev.map((p) => (p.id === saved.id ? saved : p))
+          : [saved, ...prev]
+      );
 
-    setProjects((prev) =>
-      editingId
-        ? prev.map((p) => (p.id === saved.id ? saved : p))
-        : [saved, ...prev]
-    );
-
-    setForm(emptyForm);
-    setEditingId(null);
-    setOpen(false);
-    setSaving(false);
+      setForm(emptyForm);
+      setEditingId(null);
+      setOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save project");
+    } finally {
+      setSaving(false);
+    }
   };
 
   /* ================= DELETE ================= */
@@ -142,7 +183,7 @@ export default function AdminProjects() {
 
   return (
     <div>
-      {/* ================= HEADER ================= */}
+      {/* HEADER */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-display font-bold">Projects</h1>
@@ -163,7 +204,7 @@ export default function AdminProjects() {
         </Button>
       </div>
 
-      {/* ================= SEARCH + FILTER ================= */}
+      {/* SEARCH + FILTER */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div className="relative max-w-md w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -189,7 +230,7 @@ export default function AdminProjects() {
         </select>
       </div>
 
-      {/* ================= GRID ================= */}
+      {/* GRID */}
       {loading ? (
         <div className="py-12 text-center text-muted-foreground">
           Loading projects…
@@ -221,7 +262,15 @@ export default function AdminProjects() {
                   <button
                     onClick={() => {
                       setForm({
-                        ...project,
+                        title: project.title,
+                        slug: project.slug,
+                        client: project.client,
+                        year: project.year,
+                        category: project.category,
+                        description: project.description,
+                        thumbnail: project.thumbnail,
+                        images: project.images || [],
+                        featured: project.featured,
                         services:
                           project.services?.map((s) => s.serviceId) || [],
                       });
@@ -256,101 +305,103 @@ export default function AdminProjects() {
         </div>
       )}
 
-      {/* ================= MODAL ================= */}
+      {/* MODAL */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingId ? "Edit Project" : "Add Project"}
             </DialogTitle>
+            <DialogDescription>
+              Fields marked * are required.
+            </DialogDescription>
           </DialogHeader>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              placeholder="Title *"
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
-            />
-            <Input
-              placeholder="Slug (auto)"
-              value={form.slug}
-              onChange={(e) => setForm({ ...form, slug: e.target.value })}
-            />
-            <Input
-              placeholder="Client *"
-              value={form.client}
-              onChange={(e) => setForm({ ...form, client: e.target.value })}
-            />
-            <Input
-              placeholder="Year *"
-              value={form.year}
-              onChange={(e) => setForm({ ...form, year: e.target.value })}
-            />
-            <Input
-              placeholder="Category (optional)"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-            />
-            <Input
-              placeholder="Thumbnail URL"
-              value={form.thumbnail}
-              onChange={(e) =>
-                setForm({ ...form, thumbnail: e.target.value })
-              }
-            />
-          </div>
-
-          <Textarea
-            className="mt-4"
-            placeholder="Description"
-            value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
-          />
-
-          <label className="flex items-center gap-2 mt-4">
-            <Checkbox
-              checked={form.featured}
-              onCheckedChange={(v) =>
-                setForm({ ...form, featured: Boolean(v) })
-              }
-            />
-            Featured project
-          </label>
-
-          <div className="mt-4 space-y-2">
-            <p className="text-sm font-medium">Services</p>
-            <div className="grid grid-cols-2 gap-2">
-              {services.map((service) => (
-                <label key={service.id} className="flex items-center gap-2">
-                  <Checkbox
-                    checked={form.services.includes(service.id)}
-                    onCheckedChange={(checked) =>
-                      setForm({
-                        ...form,
-                        services: checked
-                          ? [...form.services, service.id]
-                          : form.services.filter((id) => id !== service.id),
-                      })
-                    }
-                  />
-                  {service.title}
-                </label>
-              ))}
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <Input placeholder="Title *" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              <Input placeholder="Slug (auto)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
+              <Input placeholder="Client *" value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} />
+              <Input placeholder="Year *" value={form.year} onChange={(e) => setForm({ ...form, year: e.target.value })} />
+              <Input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
             </div>
-          </div>
 
-          <div className="flex justify-end mt-6">
-            <Button onClick={handleSubmit} disabled={saving}>
-              {saving
-                ? editingId
+            {/* THUMBNAIL */}
+            <div>
+              <p className="text-sm font-medium mb-2">Thumbnail *</p>
+              {form.thumbnail && (
+                <img src={form.thumbnail} className="h-40 rounded border mb-2 object-cover" />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  if (!e.target.files?.length) return;
+                  const urls = await uploadImages(e.target.files);
+                  setForm({ ...form, thumbnail: urls[0] });
+                }}
+              />
+            </div>
+
+            {/* GALLERY */}
+            <div>
+              <p className="text-sm font-medium mb-2">Gallery Images</p>
+              <div className="grid grid-cols-4 gap-2 mb-2">
+                {form.images.map((img, i) => (
+                  <div key={i} className="relative">
+                    <img src={img} className="h-24 w-full rounded border object-cover" />
+                    <button
+                      onClick={() =>
+                        setForm({
+                          ...form,
+                          images: form.images.filter((_, idx) => idx !== i),
+                        })
+                      }
+                      className="absolute top-1 right-1 bg-black/70 text-white text-xs px-1 rounded"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={async (e) => {
+                  if (!e.target.files?.length) return;
+                  const urls = await uploadImages(e.target.files);
+                  setForm({ ...form, images: [...form.images, ...urls] });
+                }}
+              />
+            </div>
+
+            <Textarea
+              placeholder="Description"
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
+
+            <label className="flex items-center gap-2">
+              <Checkbox
+                checked={form.featured}
+                onCheckedChange={(v) =>
+                  setForm({ ...form, featured: Boolean(v) })
+                }
+              />
+              Featured project
+            </label>
+
+            <div className="flex justify-end pt-4 border-t">
+              <Button onClick={handleSubmit} disabled={saving}>
+                {saving
                   ? "Saving…"
-                  : "Creating…"
-                : editingId
-                ? "Save Changes"
-                : "Create Project"}
-            </Button>
+                  : editingId
+                  ? "Save Changes"
+                  : "Create Project"}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
