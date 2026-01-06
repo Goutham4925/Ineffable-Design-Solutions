@@ -165,9 +165,12 @@ const ServicesSection = () => {
           return (
             <div
               key={service.id}
-              className="service-panel absolute inset-0 flex items-center"
+              className={`service-panel absolute inset-0 flex items-center ${
+                activeIndex === index ? "pointer-events-auto" : "pointer-events-none"
+              }`}
               style={{ zIndex: index + 1 }}
             >
+
               <div className="container-wide w-full">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                   {/* LEFT */}
