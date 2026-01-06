@@ -29,7 +29,7 @@ const Navbar = () => {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Services", href: "/services" },
-    { label: "Blogs", href: "/blogs" },
+    // { label: "Blogs", href: "/blogs" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
@@ -113,13 +113,13 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-card border-l border-border z-50 md:hidden"
+              className="fixed top-0 right-0 bottom-0 w-[280px] max-w-sm bg-card border-l border-border z-50 md:hidden"
             >
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between h-20 px-6 border-b border-border">
                   <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                    <Logo className="h-8 w-auto" />
+                    {/* <Logo className="h-8 w-auto" /> */}
                   </Link>
                   <button 
                     className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"

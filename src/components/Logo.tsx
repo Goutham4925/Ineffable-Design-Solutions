@@ -1,6 +1,11 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import logoLight from "@/assets/logo.svg";
+
+const logoDark =
+  "https://res.cloudinary.com/dspbp48zi/image/upload/v1767714748/Frame_1597882131_pumn6s.png";
+
+const logoLight =
+  "https://res.cloudinary.com/dspbp48zi/image/upload/v1767714748/Frame_1597882146_eumzjs.png";
 
 interface LogoProps {
   className?: string;
@@ -15,21 +20,22 @@ const Logo = ({ className = "h-10", showText = false }: LogoProps) => {
     setMounted(true);
   }, []);
 
+  // Prevent hydration mismatch
   if (!mounted) {
-    return <div className={`${className} bg-transparent`} />;
+    return <div className={className} />;
   }
 
-  const isDark = resolvedTheme === "dark";
+  const logoSrc = resolvedTheme === "dark" ? logoDark : logoLight;
 
   return (
     <div className="flex items-center gap-3">
       <img
-        src={logoLight}
+        src={logoSrc}
         alt="Ineffable Design Solutions"
-        className={`${className} object-contain transition-all duration-300 ${
-          isDark ? "" : "invert brightness-0"
-        }`}
+        className={`${className} object-contain transition-opacity duration-300`}
+        draggable={false}
       />
+
       {showText && (
         <span className="font-display font-bold text-lg tracking-tight hidden sm:block">
           Ineffable
