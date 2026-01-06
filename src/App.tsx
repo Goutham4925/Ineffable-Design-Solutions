@@ -29,6 +29,9 @@ import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
 import AdminUsers from "./pages/admin/Users";
 import AdminMessages from "./pages/admin/Messages";
+import ScrollToTop from "./components/ScrollToTop";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +42,7 @@ const App = () => (
       <Sonner />
 
       <BrowserRouter>
+      <ScrollToTop />
         <Routes>
           {/* ================= PUBLIC ROUTES ================= */}
           <Route path="/" element={<Index />} />
@@ -48,6 +52,10 @@ const App = () => (
           <Route path="/projects/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* LEGAL */}
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
 
           {/* ================= ADMIN AUTH ================= */}
           <Route path="/admin/login" element={<AdminAuth />} />
