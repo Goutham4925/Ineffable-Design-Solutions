@@ -200,7 +200,7 @@ export default function AdminProjects() {
           }}
         >
           <Plus className="w-4 h-4 mr-2" />
-          Add Project
+          Add Blog
         </Button>
       </div>
 

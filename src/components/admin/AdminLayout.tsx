@@ -18,7 +18,7 @@ import Logo from "@/components/Logo";
 const sidebarLinks = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Services", href: "/admin/services", icon: FileText },
-  { label: "Projects", href: "/admin/projects", icon: Briefcase },
+  { label: "Blogs", href: "/admin/blogs", icon: Briefcase },
   { label: "Team", href: "/admin/team", icon: Users },
   { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquare },
   // { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
