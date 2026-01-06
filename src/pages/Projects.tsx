@@ -35,7 +35,7 @@ const ProjectsPage = () => {
   /* ================= FETCH ================= */
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blogs`).then((r) => r.json()),
       fetch(`${API_BASE}/api/services`).then((r) => r.json()),
     ]).then(([projectsData, servicesData]) => {
       setProjects(projectsData);
@@ -119,7 +119,7 @@ const ProjectsPage = () => {
                 transition={{ delay: index * 0.1 }}
                 className="group"
               >
-                <Link to={`/projects/${project.slug}`}>
+                <Link to={`/blogs/${project.slug}`}>
                   <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-card border border-border">
                     <img
                       src={project.thumbnail}

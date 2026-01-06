@@ -43,8 +43,8 @@ const ProjectDetail = () => {
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE}/api/projects/slug/${slug}`).then((r) => r.json()),
-      fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blogs/slug/${slug}`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blogs`).then((r) => r.json()),
     ])
       .then(([projectData, all]) => {
         setProject(projectData);
@@ -69,7 +69,7 @@ const ProjectDetail = () => {
           <h1 className="text-4xl font-display font-bold mb-4">
             Project Not Found
           </h1>
-          <Link to="/projects" className="text-primary hover:underline">
+          <Link to="/blogs" className="text-primary hover:underline">
             Back to Projects
           </Link>
         </div>
@@ -108,7 +108,7 @@ const ProjectDetail = () => {
               className="mb-12"
             >
               <Link
-                to="/projects"
+                to="/blogs"
                 className="group inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -241,7 +241,7 @@ const NavCard = ({
   right?: boolean;
 }) => (
   <Link
-    to={`/projects/${project.slug}`}
+    to={`/blogs/${project.slug}`}
     className={`group bg-card border border-border rounded-2xl p-8 hover:border-primary/50 transition-all ${
       right ? "text-right" : ""
     }`}

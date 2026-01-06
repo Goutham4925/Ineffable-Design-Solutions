@@ -118,9 +118,15 @@ const AboutPage = () => {
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-8">
               We design the <span className="gradient-text">ineffable</span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Ineffable Design Solutions is a full-service digital agency that
-              combines creative excellence with technical innovation.
+            <p>
+              Ineffable Design Solutions is a full-service digital agency that combines 
+              creative excellence with technical innovation. We partner with forward-thinking 
+              brands to create digital experiences that captivate, convert, and inspire.
+            </p>
+            <p>
+              Our multidisciplinary team of designers, developers, and strategists work 
+              together to deliver solutions that not only look exceptional but perform 
+              flawlessly. From concept to launch, we're committed to excellence at every step.
             </p>
           </motion.div>
         </section>

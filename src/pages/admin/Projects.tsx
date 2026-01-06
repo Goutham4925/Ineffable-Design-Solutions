@@ -77,7 +77,7 @@ export default function AdminProjects() {
   /* ================= FETCH ================= */
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blogs`).then((r) => r.json()),
       fetch(`${API_BASE}/api/services`).then((r) => r.json()),
     ])
       .then(([p, s]) => {
@@ -144,8 +144,8 @@ export default function AdminProjects() {
     try {
       const res = await fetch(
         editingId
-          ? `${API_BASE}/api/projects/${editingId}`
-          : `${API_BASE}/api/projects`,
+          ? `${API_BASE}/api/blogs/${editingId}`
+          : `${API_BASE}/api/blogs`,
         {
           method: editingId ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -177,7 +177,7 @@ export default function AdminProjects() {
   /* ================= DELETE ================= */
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this project?")) return;
-    await fetch(`${API_BASE}/api/projects/${id}`, { method: "DELETE" });
+    await fetch(`${API_BASE}/api/blogs/${id}`, { method: "DELETE" });
     setProjects((prev) => prev.filter((p) => p.id !== id));
   };
 

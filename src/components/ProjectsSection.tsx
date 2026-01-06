@@ -29,7 +29,7 @@ const ProjectsSection = () => {
   /* ================= FETCH ================= */
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE}/api/projects`).then((r) => r.json()),
+      fetch(`${API_BASE}/api/blogs`).then((r) => r.json()),
       fetch(`${API_BASE}/api/services`).then((r) => r.json()),
     ]).then(([projectsData, servicesData]) => {
       setProjects(projectsData.filter((p: Project) => p.featured));
@@ -122,7 +122,7 @@ const ProjectsSection = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group"
             >
-              <Link to={`/projects/${project.slug}`} className="block">
+              <Link to={`/blogs/${project.slug}`} className="block">
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-card border border-border">
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${
@@ -168,7 +168,7 @@ const ProjectsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mt-16"
         >
-          <Link to="/projects" className="btn-outline">
+          <Link to="/blogs" className="btn-outline">
             View All Projects
           </Link>
         </motion.div>
