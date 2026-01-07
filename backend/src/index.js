@@ -14,6 +14,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:8080",
   "https://ineffable-design-solutions.vercel.app",
+  "https://www.ineffabledesignsolutions.com"
   // add preview URLs if needed:
   // "https://ineffable-design-solutions-*.vercel.app"
 ];
