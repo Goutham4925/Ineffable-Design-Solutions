@@ -177,7 +177,8 @@ const AboutPage = () => {
         {/* ================= TEAM ================= */}
         <section className="bg-card/50 py-32">
           <div className="container-wide">
-            <div className="text-center mb-16">
+            {/* ================= HEADER ================= */}
+            <div className="text-center mb-20">
               <p className="text-primary font-medium tracking-[0.3em] uppercase text-xs mb-4">
                 The Team
               </p>
@@ -199,7 +200,13 @@ const AboutPage = () => {
             )}
 
             {!loadingTeam && team.length > 0 && (
-              <div className="grid gap-8 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
+              <div
+                className="
+                  grid gap-12
+                  [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]
+                  justify-center
+                "
+              >
                 {team.map((member, index) => (
                   <motion.div
                     key={member.id}
@@ -207,24 +214,40 @@ const AboutPage = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="text-center"
+                    className="group flex justify-center"
                   >
-                    <div className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-6">
-                      <img
-                        src={member.avatar}
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
+                    {/* ================= CARD ================= */}
+                    <div className="glass rounded-3xl pt-20 pb-10 px-8 max-w-md w-full text-center transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl">
+                      
+                      {/* Avatar */}
+                      <div className="relative -mt-28 mb-6">
+                        <div className="w-32 h-32 mx-auto rounded-full overflow-hidden ring-4 ring-background shadow-lg">
+                          <img
+                            src={member.avatar}
+                            alt={member.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Name */}
+                      <h3 className="text-xl font-display font-semibold mb-1">
+                        {member.name}
+                      </h3>
+
+                      {/* Role */}
+                      <p className="text-primary text-sm font-medium mb-6">
+                        {member.role}
+                      </p>
+
+                      {/* Divider */}
+                      <div className="w-12 h-px bg-border mx-auto mb-6" />
+
+                      {/* Bio (FULL CONTENT) */}
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {member.bio}
+                      </p>
                     </div>
-                    <h3 className="text-xl font-display font-semibold mb-2">
-                      {member.name}
-                    </h3>
-                    <p className="text-primary text-sm mb-2">
-                      {member.role}
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      {member.bio}
-                    </p>
                   </motion.div>
                 ))}
               </div>

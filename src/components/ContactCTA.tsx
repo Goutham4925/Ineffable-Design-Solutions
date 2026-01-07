@@ -82,12 +82,12 @@ const ContactCTA = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 text-muted-foreground"
           >
-            <a href="mailto:hello@ineffable.design" className="hover:text-primary transition-colors">
-              hello@ineffable.design
+            <a href="mailto:ineffabledesignsolutions@gmail.com" className="hover:text-primary transition-colors">
+              enquiry@ineffabledesignsolutions.com
             </a>
             <span className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground" />
-            <a href="tel:+1234567890" className="hover:text-primary transition-colors">
-              +1 (234) 567-890
+            <a href="tel:+919074029499" className="hover:text-primary transition-colors">
+              +91 9074029499
             </a>
           </motion.div>
         </div>

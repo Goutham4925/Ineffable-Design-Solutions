@@ -155,6 +155,11 @@ const Footer = () => {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link to="/contact" className="footer-link">
+                  Careers
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

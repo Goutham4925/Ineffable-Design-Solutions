@@ -64,19 +64,19 @@ const ContactPage = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@ineffable.design",
-      href: "mailto:hello@ineffable.design",
+      value: "enquiry@ineffabledesignsolutions.com",
+      href: "mailto:ineffabledesignsolutions@gmail.com",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (234) 567-890",
-      href: "tel:+1234567890",
+      value: "+91 9074029499",
+      href: "tel:+919074029499",
     },
     {
       icon: MapPin,
       label: "Address",
-      value: "123 Design Street, Creative City, CC 12345",
+      value: "Indira Nagar, Bangalore, Karnataka, India",
       href: "#",
     },
   ];
@@ -253,7 +253,7 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              {/* Social Links */}
+              {/* Social Links
               <div>
                 <h3 className="text-2xl font-display font-bold mb-6">
                   Follow Us
@@ -269,10 +269,10 @@ const ContactPage = () => {
                     </a>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* Map Placeholder */}
-              <div className="aspect-video rounded-2xl bg-card border border-border overflow-hidden relative">
+              {/* <div className="aspect-video rounded-2xl bg-card border border-border overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
@@ -280,7 +280,7 @@ const ContactPage = () => {
                     <p className="text-muted-foreground">Map Integration</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </section>

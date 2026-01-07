@@ -8,26 +8,26 @@ export interface Stat {
 export const stats: Stat[] = [
   {
     id: "1",
-    value: 8,
+    value: 3,
     suffix: "+",
     label: "Years of Excellence"
   },
   {
     id: "2",
-    value: 150,
+    value: 10,
     suffix: "+",
-    label: "Projects Delivered"
+    label: "Industries served"
   },
   {
     id: "3",
-    value: 50,
+    value: 3,
     suffix: "+",
-    label: "Global Clients"
+    label: "Countries & markets"
   },
   {
     id: "4",
-    value: 15,
-    suffix: "",
-    label: "Industry Awards"
+    value: 50,
+    suffix: "+",
+    label: "Projects delivered"
   }
 ];
