@@ -1,21 +1,33 @@
-const nodemailer = require("nodemailer");
+const RESEND_API = "https://api.resend.com/emails";
 
 /**
- * Send contact form notification to all admin emails.
+ * Send contact form notification via Resend HTTP API.
+ * Uses HTTPS — works on Vercel/Lambda (SMTP is blocked there).
+ *
+ * SETUP:
+ *  1. Sign up at resend.com → get API key
+ *  2. Add RESEND_API_KEY to Vercel environment variables
+ *  3. NOTIFY_EMAILS = comma-separated recipient list
+ *
+ * FROM address:
+ *  - Before domain verified: use "onboarding@resend.dev" (delivers to your Resend account email only)
+ *  - After domain verified: use "enquiry@ineffabledesignsolutions.com"
+ *
  * @param {{ name, email, phone, subject, message }} data
  */
 async function sendContactNotification(data) {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS.replace(/\s+/g, ""), // strip spaces from app password
-    },
-  });
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) throw new Error("RESEND_API_KEY env var not set in Vercel project settings");
 
-  const recipients = process.env.NOTIFY_EMAILS || process.env.SMTP_USER;
+  const recipients = (process.env.NOTIFY_EMAILS || "enquiry@ineffabledesignsolutions.com")
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
+
+  // Switch from address after domain is verified in Resend dashboard:
+  // Verified:   "Ineffable Design Solutions <enquiry@ineffabledesignsolutions.com>"
+  // Testing:    "onboarding@resend.dev"
+  const fromAddress = process.env.RESEND_FROM || "Ineffable Design Solutions <enquiry@ineffabledesignsolutions.com>";
 
   const html = `
 <!DOCTYPE html>
@@ -28,7 +40,6 @@ async function sendContactNotification(data) {
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;">
 
-          <!-- Header -->
           <tr>
             <td style="padding-bottom:24px;">
               <table width="100%" cellpadding="0" cellspacing="0">
@@ -42,7 +53,6 @@ async function sendContactNotification(data) {
             </td>
           </tr>
 
-          <!-- Title -->
           <tr>
             <td style="padding-bottom:32px;">
               <h1 style="margin:0;font-family:Georgia,serif;font-size:36px;font-weight:400;color:#ede8e1;line-height:1;letter-spacing:-0.02em;">New Enquiry</h1>
@@ -50,11 +60,8 @@ async function sendContactNotification(data) {
             </td>
           </tr>
 
-          <!-- Card -->
           <tr>
             <td style="background:#111;border:1px solid #242424;">
-
-              <!-- Name row -->
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="padding:20px 28px;border-bottom:1px solid #1c1c1c;">
@@ -62,34 +69,26 @@ async function sendContactNotification(data) {
                     <p style="margin:0;font-size:17px;color:#ede8e1;font-family:Georgia,serif;font-weight:400;">${data.name}</p>
                   </td>
                 </tr>
-
-                <!-- Email row -->
                 <tr>
                   <td style="padding:20px 28px;border-bottom:1px solid #1c1c1c;">
                     <p style="margin:0 0 4px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#555;font-weight:500;">Email</p>
                     <p style="margin:0;"><a href="mailto:${data.email}" style="font-size:15px;color:#2db8a2;text-decoration:none;">${data.email}</a></p>
                   </td>
                 </tr>
-
                 ${data.phone ? `
-                <!-- Phone row -->
                 <tr>
                   <td style="padding:20px 28px;border-bottom:1px solid #1c1c1c;">
                     <p style="margin:0 0 4px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#555;font-weight:500;">Phone</p>
                     <p style="margin:0;font-size:15px;color:#ede8e1;">${data.phone}</p>
                   </td>
                 </tr>` : ""}
-
                 ${data.subject ? `
-                <!-- Subject row -->
                 <tr>
                   <td style="padding:20px 28px;border-bottom:1px solid #1c1c1c;">
                     <p style="margin:0 0 4px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#555;font-weight:500;">Subject</p>
                     <p style="margin:0;font-size:15px;color:#ede8e1;">${data.subject}</p>
                   </td>
                 </tr>` : ""}
-
-                <!-- Message row -->
                 <tr>
                   <td style="padding:20px 28px;">
                     <p style="margin:0 0 10px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#555;font-weight:500;">Message</p>
@@ -100,7 +99,6 @@ async function sendContactNotification(data) {
             </td>
           </tr>
 
-          <!-- CTA -->
           <tr>
             <td style="padding-top:24px;">
               <a href="mailto:${data.email}"
@@ -110,7 +108,6 @@ async function sendContactNotification(data) {
             </td>
           </tr>
 
-          <!-- Footer -->
           <tr>
             <td style="padding-top:40px;border-top:1px solid #1c1c1c;margin-top:40px;">
               <p style="margin:20px 0 0;font-size:11px;color:#444;letter-spacing:0.08em;">
@@ -125,16 +122,26 @@ async function sendContactNotification(data) {
   </table>
 
 </body>
-</html>
-  `;
+</html>`;
 
-  const info = await transporter.sendMail({
-    from: `"Ineffable Design Solutions" <${process.env.SMTP_USER}>`,
-    to: recipients,
-    subject: `New Message from ${data.name} — Ineffable`,
-    html,
+  const res = await fetch(RESEND_API, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: fromAddress,
+      to: recipients,
+      reply_to: data.email,
+      subject: `New Message from ${data.name} — Ineffable`,
+      html,
+    }),
   });
-  console.log("[mailer] sent OK →", info.messageId, "| to:", recipients);
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${JSON.stringify(result)}`);
+  console.log("[mailer] sent OK → id:", result.id, "| to:", recipients.join(", "));
 }
 
 module.exports = { sendContactNotification };
