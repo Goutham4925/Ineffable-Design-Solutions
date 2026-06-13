@@ -2,8 +2,12 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, User, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
+import { cachedFetch } from "@/lib/api-cache";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -43,8 +47,8 @@ const ProjectDetail = () => {
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE}/api/blogs/slug/${slug}`).then((r) => r.json()),
-      fetch(`${API_BASE}/api/blogs`).then((r) => r.json()),
+      cachedFetch<Project>(`${API_BASE}/api/blogs/slug/${slug}`),
+      cachedFetch<Project[]>(`${API_BASE}/api/blogs`),
     ])
       .then(([projectData, all]) => {
         setProject(projectData);
@@ -90,6 +94,29 @@ const ProjectDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{project.title} | Ineffable Design Solutions Portfolio</title>
+        <meta name="description" content={project.description} />
+        <link rel="canonical" href={`https://www.ineffabledesignsolutions.com/blogs/${project.slug}`} />
+        <meta property="og:title" content={`${project.title} — Ineffable Design Solutions`} />
+        <meta property="og:description" content={project.description} />
+        <meta property="og:url" content={`https://www.ineffabledesignsolutions.com/blogs/${project.slug}`} />
+        {project.thumbnail && <meta property="og:image" content={project.thumbnail} />}
+        <script type="application/ld+json">{`{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          "name": "${project.title.replace(/"/g, '\\"')}",
+          "description": "${project.description.replace(/"/g, '\\"')}",
+          "creator": {
+            "@type": "Organization",
+            "name": "Ineffable Design Solutions",
+            "url": "https://www.ineffabledesignsolutions.com"
+          },
+          "url": "https://www.ineffabledesignsolutions.com/blogs/${project.slug}"
+        }`}</script>
+      </Helmet>
+      <ScrollProgress />
+      <CustomCursor />
       <Navbar />
 
       <main>

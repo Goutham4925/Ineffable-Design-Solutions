@@ -2,18 +2,8 @@ import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ArrowRight,
-  Code,
-  Globe,
-  Palette,
-  Sparkles,
-  TrendingUp,
-  Play,
-  Box,
-  Cpu,
-} from "lucide-react";
 import { Link } from "react-router-dom";
+import { cachedFetch } from "@/lib/api-cache";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,18 +19,6 @@ type Service = {
   description: string;
   features: string[];
   image?: string;
-};
-
-/* ================= ICON MAP ================= */
-const serviceIcons: Record<string, React.ElementType> = {
-  "software-development": Code,
-  "web-app-development": Globe,
-  "ui-ux-design": Palette,
-  "branding-identity": Sparkles,
-  "digital-marketing": TrendingUp,
-  "motion-graphics": Play,
-  "product-design": Box,
-  "ai-automation": Cpu,
 };
 
 /* ================= GRADIENT MAP ================= */
@@ -64,8 +42,7 @@ const ServicesSection = () => {
 
   /* ================= FETCH ================= */
   useEffect(() => {
-    fetch(`${API_BASE}/api/services`)
-      .then((res) => res.json())
+    cachedFetch<Service[]>(`${API_BASE}/api/services`, 5 * 60_000)
       .then(setServices)
       .catch(console.error);
   }, []);
@@ -144,96 +121,108 @@ const ServicesSection = () => {
       ref={containerRef}
       className="relative h-screen overflow-hidden bg-background"
     >
-      {/* HEADER */}
-      <div className="absolute top-0 left-0 right-0 z-20 pt-6 md:pt-8 container-wide">
-        <p className="text-primary tracking-[0.3em] uppercase text-xs mb-1">
-          What We Do
-        </p>
-        <h2 className="text-3xl md:text-4xl font-display font-bold">
-          Our Services
-        </h2>
-      </div>
-
-      {/* PANELS */}
-      <div ref={cardsRef} className="absolute inset-0 pt-24">
+      {/* Panels */}
+      <div ref={cardsRef} className="absolute inset-0">
         {services.map((service, index) => {
-          const Icon = serviceIcons[service.slug] || Code;
-          const gradient =
-            serviceColors[service.slug] ||
-            "from-primary/60 to-primary/30";
+          const gradient = serviceColors[service.slug] || "from-primary/60 to-primary/30";
 
           return (
             <div
               key={service.id}
-              className={`service-panel absolute inset-0 flex items-center ${
+              className={`service-panel absolute inset-0 flex ${
                 activeIndex === index ? "pointer-events-auto" : "pointer-events-none"
               }`}
               style={{ zIndex: index + 1 }}
             >
+              {/* LEFT — content */}
+              <div className="relative flex flex-col justify-center w-full lg:w-[48%] px-6 md:px-12 lg:px-20 py-24">
+                {/* Watermark number */}
+                <span
+                  aria-hidden="true"
+                  className="absolute bottom-4 left-4 select-none pointer-events-none text-foreground/[0.03] font-bold leading-none"
+                  style={{ fontFamily: "var(--font-display)", fontSize: "clamp(8rem, 22vw, 20rem)" }}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-              <div className="container-wide w-full">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  {/* LEFT */}
-                  <div className="space-y-6">
-                    <span className="text-muted-foreground font-mono">
-                      0{index + 1}
+                {/* Top meta */}
+                <div className="flex items-center gap-3 mb-8 relative z-10">
+                  <div className="w-6 h-px bg-primary" />
+                  <span className="label-small">{service.tagline}</span>
+                  <span className="ml-auto text-muted-foreground/40 font-mono text-xs">
+                    {String(index + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* Service title */}
+                <h2
+                  className="text-display mb-6 relative z-10"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 4.8rem)", lineHeight: 1.05 }}
+                >
+                  {service.title}
+                </h2>
+
+                {/* Description */}
+                <p className="text-muted-foreground leading-relaxed mb-8 max-w-md relative z-10 text-sm md:text-base">
+                  {service.description}
+                </p>
+
+                {/* Feature chips */}
+                <div className="flex flex-wrap gap-2 mb-10 relative z-10">
+                  {service.features.map((f, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 border border-border/50 text-muted-foreground text-xs tracking-wide hover:border-primary/40 hover:text-foreground transition-colors duration-200"
+                      style={{ fontFamily: "var(--font-body)" }}
+                    >
+                      {f}
                     </span>
+                  ))}
+                </div>
 
-                    <div
-                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center`}
-                    >
-                      <Icon className="w-8 h-8" />
-                    </div>
+                {/* CTA */}
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="relative z-10 group inline-flex items-center gap-3 text-sm font-medium"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  <span className="w-10 h-px bg-primary transition-all duration-300 group-hover:w-16" />
+                  <span className="text-primary group-hover:tracking-wider transition-all duration-300">Explore Service</span>
+                </Link>
+              </div>
 
-                    <div>
-                      <p className="text-primary uppercase text-xs tracking-wide mb-2">
-                        {service.tagline}
-                      </p>
-                      <h3 className="text-4xl font-display font-bold">
-                        {service.title}
-                      </h3>
-                    </div>
+              {/* RIGHT — immersive panel (desktop only) */}
+              <div className="hidden lg:flex flex-col flex-1 relative overflow-hidden">
+                {/* Gradient backdrop */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-15`} />
+                {/* Grid overlay */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--foreground)/0.04)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground)/0.04)_1px,transparent_1px)] bg-[size:48px_48px]" />
+                {/* Vertical border */}
+                <div className="absolute left-0 top-0 bottom-0 w-px bg-border/30" />
 
-                    <p className="text-muted-foreground max-w-xl">
-                      {service.description}
-                    </p>
+                {/* Service image or icon display */}
+                {service.image ? (
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity"
+                  />
+                ) : null}
 
-                    <ul className="grid grid-cols-2 gap-3">
-                      {service.features.map((f, i) => (
-                        <li key={i} className="text-sm text-muted-foreground">
-                          • {f}
-                        </li>
-                      ))}
-                    </ul>
+                {/* Service name — large italic watermark */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-12">
+                  <p
+                    className="text-display-italic text-foreground/8 text-center leading-tight select-none"
+                    style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
+                    aria-hidden="true"
+                  >
+                    {service.title}
+                  </p>
+                </div>
 
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="inline-flex items-center gap-2 text-primary font-medium"
-                    >
-                      Learn More
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-
-                  {/* RIGHT — IMAGE */}
-                  <div className="relative hidden lg:block">
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-20 blur-3xl`}
-                    />
-                    <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border bg-card">
-                      {service.image ? (
-                        <img
-                          src={service.image}
-                          alt={service.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Icon className="w-32 h-32 text-foreground/20" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                {/* Corner label */}
+                <div className="absolute top-8 right-8 flex items-center gap-2">
+                  <span className="label-small text-foreground/20">What We Do</span>
                 </div>
               </div>
             </div>
@@ -241,18 +230,12 @@ const ServicesSection = () => {
         })}
       </div>
 
-      {/* INDICATOR */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2">
-        {services.map((_, i) => (
-          <span
-            key={i}
-            className={`w-2 h-2 rounded-full ${
-              activeIndex === i
-                ? "bg-primary scale-125"
-                : "bg-border"
-            }`}
-          />
-        ))}
+      {/* Bottom progress bar */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 h-px bg-border/30">
+        <div
+          className="h-full bg-primary transition-all duration-500 ease-out"
+          style={{ width: services.length > 1 ? `${(activeIndex / (services.length - 1)) * 100}%` : "100%" }}
+        />
       </div>
     </section>
   );

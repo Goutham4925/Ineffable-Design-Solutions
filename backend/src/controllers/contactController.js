@@ -1,4 +1,5 @@
 const prisma = require("../../prisma/client");
+const { sendContactNotification } = require("../utils/mailer");
 
 /* ================= CREATE CONTACT ================= */
 exports.createContact = async (req, res, next) => {
@@ -16,10 +17,15 @@ exports.createContact = async (req, res, next) => {
         name,
         email,
         phone,
-        service: subject, // mapping subject → service
+        service: subject,
         message,
       },
     });
+
+    // Fire email — don't block response if it fails
+    sendContactNotification({ name, email, phone, subject, message }).catch((err) =>
+      console.error("[mailer] failed to send notification:", err.message)
+    );
 
     res.json({ success: true });
   } catch (err) {

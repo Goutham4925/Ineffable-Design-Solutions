@@ -5,6 +5,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const compression = require("compression");
 require("dotenv").config();
 
 const app = express();
@@ -51,6 +52,7 @@ app.use(
 );
 
 /* ===================== CORE MIDDLEWARE ===================== */
+app.use(compression({ threshold: 1024 }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "tiny" : "dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));

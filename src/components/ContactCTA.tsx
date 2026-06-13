@@ -1,94 +1,63 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const ContactCTA = () => {
   return (
-    <section className="relative py-32 md:py-40 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-background" />
-      
-      {/* Animated Orbs */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/20 blur-[120px]"
-      />
-
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:80px_80px] opacity-10" />
+    <section className="relative py-36 md:py-48 overflow-hidden bg-card/30">
+      {/* Background grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:80px_80px] opacity-[0.05]" />
+      {/* Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/8 blur-[120px] rounded-full" />
 
       <div className="container-wide relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-primary font-medium tracking-[0.3em] uppercase text-xs mb-8"
-          >
-            Let's Create Together
-          </motion.p>
-
-          {/* Main Heading */}
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold leading-none mb-8"
-          >
-            Have a project
-            <br />
-            <span className="gradient-text">in mind?</span>
-          </motion.h2>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto"
-          >
-            We'd love to hear about your project and discuss how we can help bring your vision to life.
-          </motion.p>
-
-          {/* CTA Button */}
+        <div className="max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.7 }}
           >
-            <Link
-              to="/contact"
-              className="group inline-flex items-center gap-4 btn-primary text-base px-10 py-5"
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-8 h-px bg-primary" />
+              <span className="label-small">Let&rsquo;s Create Together</span>
+            </div>
+
+            <h2
+              className="text-display mb-8"
+              style={{ fontSize: "clamp(3rem, 8vw, 8rem)", lineHeight: 1 }}
             >
-              Start a Conversation
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
+              Have a project
+              <br />
+              <span className="text-display-italic gradient-text">in mind?</span>
+            </h2>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 text-muted-foreground"
-          >
-            <a href="mailto:ineffabledesignsolutions@gmail.com" className="hover:text-primary transition-colors">
-              enquiry@ineffabledesignsolutions.com
-            </a>
-            <span className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground" />
-            <a href="tel:+919074029499" className="hover:text-primary transition-colors">
-              +91 9074029499
-            </a>
+            <p className="text-muted-foreground text-lg max-w-xl mb-12 leading-relaxed">
+              We&rsquo;d love to hear about your project and discuss how we can help
+              bring your vision to life.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start gap-6">
+              <Link to="/contact" className="btn-primary text-base px-10 py-5" data-cursor="Let's Go">
+                Start a Conversation
+                <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+
+              <div className="flex flex-col gap-1 sm:pl-6 sm:border-l sm:border-border">
+                <a
+                  href="mailto:enquiry@ineffabledesignsolutions.com"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  enquiry@ineffabledesignsolutions.com
+                </a>
+                <a
+                  href="tel:+919074029499"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  +91 9074029499
+                </a>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

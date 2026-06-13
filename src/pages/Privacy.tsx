@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const Privacy = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="container-wide pt-32 pb-24 max-w-4xl">
+    <>
+      <ScrollProgress />
+      <CustomCursor />
+      <main className="container-wide pt-32 pb-24 max-w-4xl">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
@@ -104,6 +109,7 @@ const Privacy = () => {
         </section>
       </div>
     </main>
+    </>
   );
 };
 

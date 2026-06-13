@@ -1,19 +1,18 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
+import SplitReveal from "@/components/SplitReveal";
+import TextScramble from "@/components/TextScramble";
 
 const ContactPage = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -23,161 +22,138 @@ const ContactPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/contact`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
-
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       if (!res.ok) throw new Error();
-
-      toast({
-        title: "Message Sent!",
-        description: "We’ll get back to you soon.",
-      });
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-      });
+      toast({ title: "Message Sent!", description: "We'll get back to you soon." });
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to send message",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
-  const contactInfo = [
-    {
-      icon: Mail,
-      label: "Email",
-      value: "enquiry@ineffabledesignsolutions.com",
-      href: "mailto:ineffabledesignsolutions@gmail.com",
-    },
-    {
-      icon: Phone,
-      label: "Phone",
-      value: "+91 9074029499",
-      href: "tel:+919074029499",
-    },
-    {
-      icon: MapPin,
-      label: "Address",
-      value: "Indira Nagar, Bangalore, Karnataka, India",
-      href: "#",
-    },
-  ];
+  const inputClass = "w-full px-0 py-3 bg-transparent border-0 border-b border-border/60 focus:border-primary focus-visible:ring-0 outline-none text-foreground placeholder:text-muted-foreground/40 transition-colors duration-200 text-sm";
+  const selectClass = `${inputClass} contact-select`;
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Contact Ineffable Design Solutions | Start a Project — Anywhere in the World</title>
+        <meta name="description" content="Have a project in mind? Contact Ineffable Design Solutions — a remote digital agency from India serving clients globally. Email, call or WhatsApp +91 9074029499. We respond within 24 hours." />
+        <link rel="canonical" href="https://www.ineffabledesignsolutions.com/contact" />
+        <meta property="og:title" content="Contact Ineffable Design Solutions — Let's Build Together" />
+        <meta property="og:description" content="Start a project, ask a question, or say hello. Based in Bangalore. Serving clients globally." />
+        <meta property="og:url" content="https://www.ineffabledesignsolutions.com/contact" />
+        <script type="application/ld+json">{`{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact Ineffable Design Solutions",
+          "url": "https://www.ineffabledesignsolutions.com/contact",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "Ineffable Design Solutions",
+            "telephone": "+91-9074029499",
+            "email": "enquiry@ineffabledesignsolutions.com",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Indira Nagar",
+              "addressLocality": "Bangalore",
+              "addressRegion": "Karnataka",
+              "postalCode": "560038",
+              "addressCountry": "IN"
+            }
+          }
+        }`}</script>
+      </Helmet>
+      <ScrollProgress />
+      <CustomCursor />
       <Navbar />
-      
-      <main className="pt-32">
+      <main id="main-content" className="pt-32">
+
         {/* Hero */}
-        <section className="container-wide mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl"
-          >
-            <p className="text-primary font-medium tracking-[0.3em] uppercase text-xs mb-4">
-              Get In Touch
-            </p>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-8">
-              Let's create{" "}
-              <span className="gradient-text">something great</span>
+        <section className="container-wide mb-20">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-8 h-px bg-primary" />
+              <TextScramble text="Get In Touch" className="label-small" triggerOnMount mountDelay={300} />
+            </div>
+            <h1 className="text-display mb-6" style={{ fontSize: "clamp(3rem, 7vw, 7rem)", lineHeight: 1 }}>
+              <SplitReveal text="Let's create" as="span" delay={0.1} />
+              {" "}
+              <SplitReveal
+                text="something great"
+                as="span"
+                className="text-display-italic gradient-text"
+                delay={0.28}
+              />
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Have a project in mind? We'd love to hear about it. Drop us a line and let's start the conversation.
-            </p>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45 }}
+              className="text-muted-foreground text-lg max-w-xl leading-relaxed"
+            >
+              Have a project in mind? We&rsquo;d love to hear about it. Drop us a line and let&rsquo;s start the conversation.
+            </motion.p>
           </motion.div>
         </section>
 
-        {/* Contact Section */}
+        {/* Content */}
         <section className="container-wide pb-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-20">
+
+            {/* Form */}
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
+              <form onSubmit={handleSubmit} className="space-y-8" noValidate>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      Name *
-                    </label>
+                    <label htmlFor="name" className="label-small block mb-3">Name *</label>
                     <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors"
-                      placeholder="John Doe"
+                      type="text" id="name" name="name" value={formData.name}
+                      onChange={handleChange} required
+                      autoComplete="name"
+                      className={inputClass}
+                      placeholder="Riya Sharma…"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      Email *
-                    </label>
+                    <label htmlFor="email" className="label-small block mb-3">Email *</label>
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors"
-                      placeholder="john@example.com"
+                      type="email" id="email" name="email" value={formData.email}
+                      onChange={handleChange} required
+                      autoComplete="email"
+                      spellCheck={false}
+                      className={inputClass}
+                      placeholder="riya@studio.io…"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                      Phone
-                    </label>
+                    <label htmlFor="phone" className="label-small block mb-3">Phone</label>
                     <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
+                      type="tel" id="phone" name="phone" value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors"
-                      placeholder="+1 (234) 567-890"
+                      autoComplete="tel"
+                      className={inputClass}
+                      placeholder="+91 98765 43210…"
                     />
                   </div>
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                      Subject *
-                    </label>
+                    <label htmlFor="subject" className="label-small block mb-3">Subject *</label>
                     <select
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors"
+                      id="subject" name="subject" value={formData.subject}
+                      onChange={handleChange} required
+                      className={`${selectClass} cursor-pointer`}
                     >
-                      <option value="">Select a subject</option>
+                      <option value="">Select a subject&hellip;</option>
                       <option value="project">New Project</option>
                       <option value="partnership">Partnership</option>
                       <option value="careers">Careers</option>
@@ -187,105 +163,60 @@ const ContactPage = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message *
-                  </label>
+                  <label htmlFor="message" className="label-small block mb-3">Message *</label>
                   <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-lg bg-card border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors resize-none"
-                    placeholder="Tell us about your project..."
+                    id="message" name="message" value={formData.message}
+                    onChange={handleChange} required rows={5}
+                    className={`${inputClass} resize-none`}
+                    placeholder="We're building a SaaS platform for architects…"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-primary w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      Send Message
-                      <Send className="w-4 h-4 ml-2 inline" />
-                    </>
-                  )}
+                  {isSubmitting ? "Sending…" : "Send Message"}
                 </button>
               </form>
             </motion.div>
 
-            {/* Contact Info */}
+            {/* Info */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="space-y-8"
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="space-y-10"
             >
               <div>
-                <h3 className="text-2xl font-display font-bold mb-6">
-                  Contact Information
-                </h3>
-                <div className="space-y-6">
-                  {contactInfo.map((info) => (
-                    <a
-                      key={info.label}
-                      href={info.href}
-                      className="flex items-start gap-4 group"
-                    >
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <info.icon className="w-5 h-5 text-primary" />
+                <h2 className="text-display mb-8" style={{ fontSize: "2rem" }}>Contact Information</h2>
+                <div className="space-y-8">
+                  {[
+                    { Icon: Mail, label: "Email", value: "enquiry@ineffabledesignsolutions.com", href: "mailto:enquiry@ineffabledesignsolutions.com" },
+                    { Icon: Phone, label: "Phone", value: "+91 9074029499", href: "tel:+919074029499" },
+                    { Icon: MapPin, label: "Location", value: "Indira Nagar, Bangalore, Karnataka, India", href: undefined },
+                  ].map(({ Icon, label, value, href }) => (
+                    <div key={label} className="flex items-start gap-5">
+                      <div className="w-10 h-10 border border-border/60 flex items-center justify-center flex-none">
+                        <Icon className="w-4 h-4 text-primary" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">
-                          {info.label}
-                        </p>
-                        <p className="font-medium group-hover:text-primary transition-colors">
-                          {info.value}
-                        </p>
+                        <p className="label-small mb-1">{label}</p>
+                        {href ? (
+                          <a href={href} className="text-sm text-foreground hover:text-primary transition-colors">{value}</a>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">{value}</p>
+                        )}
                       </div>
-                    </a>
+                    </div>
                   ))}
                 </div>
               </div>
-
-              {/* Social Links
-              <div>
-                <h3 className="text-2xl font-display font-bold mb-6">
-                  Follow Us
-                </h3>
-                <div className="flex gap-4">
-                  {["LinkedIn", "Twitter", "Instagram", "Dribbble"].map((social) => (
-                    <a
-                      key={social}
-                      href="#"
-                      className="px-4 py-2 rounded-full bg-card border border-border hover:border-primary hover:text-primary transition-colors text-sm"
-                    >
-                      {social}
-                    </a>
-                  ))}
-                </div>
-              </div> */}
-
-              {/* Map Placeholder */}
-              {/* <div className="aspect-video rounded-2xl bg-card border border-border overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-10 h-10 text-primary mx-auto mb-4" />
-                    <p className="text-muted-foreground">Map Integration</p>
-                  </div>
-                </div>
-              </div> */}
             </motion.div>
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );

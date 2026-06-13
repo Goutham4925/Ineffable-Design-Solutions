@@ -42,7 +42,7 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="admin-layout min-h-screen bg-background">
       {/* ================= MOBILE TOGGLE ================= */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}

@@ -1,97 +1,145 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
+import MagneticElement from "./MagneticElement";
+import TextScramble from "./TextScramble";
 
 const HeroSection = () => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
+  /* Mouse-tracking spotlight */
+  const mouseX = useMotionValue(50);
+  const mouseY = useMotionValue(50);
+  const smoothX = useSpring(mouseX, { stiffness: 35, damping: 22 });
+  const smoothY = useSpring(mouseY, { stiffness: 35, damping: 22 });
+  const spotlightBg = useMotionTemplate`radial-gradient(680px circle at ${smoothX}% ${smoothY}%, hsl(174 58% 42% / 0.11), transparent 70%)`;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(((e.clientX - rect.left) / rect.width) * 100);
+    mouseY.set(((e.clientY - rect.top) / rect.height) * 100);
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-background">
-      {/* Background Image - Wave visible with its natural colors */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://framerusercontent.com/images/ZMYKutVkKIecWMzISEDH8aZR9E.jpg')`,
-          }}
-        />
-        {/* Light mode: subtle overlay to keep wave visible, Dark mode: stronger overlay */}
-        <div className="absolute inset-0 bg-white/40 dark:bg-background/70" />
-      </div>
+    <section
+      ref={ref}
+      id="main-content"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden grain"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Background layers */}
+      <div className="absolute inset-0 bg-background" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,hsl(174_58%_42%_/_0.12),transparent)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:80px_80px] opacity-[0.06]" />
 
-      {/* Content */}
-      <div className="container-wide relative z-10 pt-20">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Main Title */}
-          <div className="overflow-hidden mb-6">
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold leading-[1.1] tracking-tight text-foreground"
-            >
-              Welcome to the
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden mb-10">
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold leading-[1.1] tracking-tight gradient-text"
-            >
-              Ineffable Design Solutions
-            </motion.h1>
-          </div>
+      {/* Mouse-follow spotlight */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: spotlightBg }}
+      />
 
-          {/* CTA Button */}
+      {/* Parallax content */}
+      <motion.div style={{ y, opacity }} className="container-wide relative z-10 pt-24 pb-16">
+        <div className="max-w-6xl mx-auto">
+
+          {/* Label */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="mb-16"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex items-center gap-3 mb-10"
           >
-            <Link 
-              to="/about" 
-              className="inline-flex items-center gap-2 px-8 py-4 text-sm font-medium uppercase tracking-widest text-foreground border border-border/50 hover:border-primary hover:text-primary transition-all duration-300 backdrop-blur-sm bg-card/20"
-            >
-              Learn more
-            </Link>
+            <div className="w-8 h-px bg-primary" />
+            <TextScramble
+              text="Full-Service Digital Agency"
+              className="label-small"
+              triggerOnMount
+              mountDelay={600}
+            />
           </motion.div>
 
-          {/* Subtitle */}
+          {/* Main heading */}
+          <div className="overflow-hidden pb-3 mb-0">
+            <motion.h1
+              initial={{ y: "110%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="text-display leading-none"
+              style={{ fontSize: "clamp(3.5rem, 11vw, 11rem)" }}
+            >
+              Designing
+            </motion.h1>
+          </div>
+          <div className="overflow-hidden pb-4 mb-0">
+            <motion.div
+              initial={{ y: "110%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-baseline gap-6"
+            >
+              <span
+                className="text-display-italic text-muted-foreground/40"
+                style={{ fontSize: "clamp(2rem, 5vw, 5rem)" }}
+              >
+                the
+              </span>
+              <span
+                className="gradient-text text-display"
+                style={{ fontSize: "clamp(3.5rem, 11vw, 11rem)" }}
+              >
+                Ineffable.
+              </span>
+            </motion.div>
+          </div>
+
+          {/* Divider + subtext */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.9 }}
+            className="mt-12 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8"
           >
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-foreground mb-4">
-              Transforming Businesses with Cutting-Edge Design Solutions
-            </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              Ineffable Design Solutions delivers innovative digital design and branding services, 
-              empowering businesses to thrive in the digital landscape.
+            <p
+              className="text-muted-foreground max-w-sm leading-relaxed"
+              style={{ fontSize: "clamp(0.9rem, 1.5vw, 1.1rem)" }}
+            >
+              We craft exceptional digital experiences through design,
+              engineering, and innovation — built to last.
             </p>
+
+            <div className="flex items-center gap-4">
+              <MagneticElement strength={0.3}>
+                <Link to="/contact" className="btn-primary" data-cursor="Let's Talk">
+                  Start a Project
+                </Link>
+              </MagneticElement>
+              <MagneticElement strength={0.3}>
+                <Link to="/about" className="btn-outline" data-cursor="Explore">
+                  Our Work <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                </Link>
+              </MagneticElement>
+            </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.5 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+        transition={{ duration: 1, delay: 1.4 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 border-2 border-muted-foreground/50 rounded-full flex justify-center pt-2"
-        >
-          <motion.div 
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1 h-2 bg-primary rounded-full"
-          />
-        </motion.div>
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-12 bg-gradient-to-b from-primary to-transparent"
+        />
+        <span className="label-small" style={{ fontSize: "0.6rem" }}>Scroll</span>
       </motion.div>
     </section>
   );

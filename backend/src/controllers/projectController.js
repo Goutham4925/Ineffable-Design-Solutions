@@ -14,6 +14,7 @@ exports.getAllProjects = async (req, res, next) => {
       },
     });
 
+    res.set("Cache-Control", "public, max-age=30, stale-while-revalidate=120");
     res.json(projects);
   } catch (err) {
     next(err);
@@ -42,6 +43,7 @@ exports.getProjectBySlug = async (req, res, next) => {
       return res.status(404).json({ error: "Project not found" });
     }
 
+    res.set("Cache-Control", "public, max-age=30, stale-while-revalidate=120");
     res.json(project);
   } catch (err) {
     next(err);

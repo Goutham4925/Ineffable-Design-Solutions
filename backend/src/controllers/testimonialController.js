@@ -7,10 +7,10 @@ exports.getTestimonials = async (req, res, next) => {
       orderBy: [
         { featured: "desc" },
         { order: "asc" },
-        { createdAt: "desc" },
       ],
     });
 
+    res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
     res.json(testimonials);
   } catch (err) {
     next(err);

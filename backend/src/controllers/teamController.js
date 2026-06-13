@@ -10,6 +10,7 @@ exports.getTeamPublic = async (req, res, next) => {
       orderBy: { order: "asc" },
     });
 
+    res.set("Cache-Control", "public, max-age=120, stale-while-revalidate=600");
     res.json(team);
   } catch (err) {
     next(err);

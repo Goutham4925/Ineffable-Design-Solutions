@@ -1,10 +1,19 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const NotFound = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
+      <Helmet>
+        <title>Page Not Found | Ineffable Design Solutions</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+      <ScrollProgress />
+      <CustomCursor />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
       <motion.div
         animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}

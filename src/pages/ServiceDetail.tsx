@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
+import { cachedFetch } from "@/lib/api-cache";
 import {
   ArrowLeft,
   ArrowRight,
@@ -64,22 +68,14 @@ const ServiceDetail = () => {
   /* ================= FETCH ================= */
   useEffect(() => {
     if (!slug) return;
-
-    Promise.all([
-      fetch(`${API_BASE}/api/services/${slug}`).then((r) =>
-        r.ok ? r.json() : null
-      ),
-      fetch(`${API_BASE}/api/services`).then((r) => r.json()),
-    ])
-      .then(([serviceData, servicesData]) => {
-        setService(serviceData);
-        setAllServices(servicesData || []);
-        setLoading(false);
+    cachedFetch<Service[]>(`${API_BASE}/api/services`, 5 * 60_000)
+      .then((services) => {
+        const list = Array.isArray(services) ? services : [];
+        setAllServices(list);
+        setService(list.find((s) => s.slug === slug) ?? null);
       })
-      .catch(() => {
-        setService(null);
-        setLoading(false);
-      });
+      .catch(() => setService(null))
+      .finally(() => setLoading(false));
   }, [slug]);
 
   /* ================= LOADING ================= */
@@ -128,6 +124,29 @@ const ServiceDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{service.title} | Ineffable Design Solutions — Bangalore</title>
+        <meta name="description" content={service.description} />
+        <link rel="canonical" href={`https://www.ineffabledesignsolutions.com/services/${service.slug}`} />
+        <meta property="og:title" content={`${service.title} | Ineffable Design Solutions`} />
+        <meta property="og:description" content={service.description} />
+        <meta property="og:url" content={`https://www.ineffabledesignsolutions.com/services/${service.slug}`} />
+        <script type="application/ld+json">{`{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "${service.title.replace(/"/g, '\\"')}",
+          "description": "${service.description.replace(/"/g, '\\"')}",
+          "provider": {
+            "@type": "Organization",
+            "name": "Ineffable Design Solutions",
+            "url": "https://www.ineffabledesignsolutions.com"
+          },
+          "url": "https://www.ineffabledesignsolutions.com/services/${service.slug}",
+          "areaServed": "IN"
+        }`}</script>
+      </Helmet>
+      <ScrollProgress />
+      <CustomCursor />
       <Navbar />
 
       <main className="pt-32">

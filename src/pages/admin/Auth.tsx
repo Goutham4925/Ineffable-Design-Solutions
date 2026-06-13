@@ -71,7 +71,7 @@ export default function AdminAuth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="admin-layout min-h-screen flex items-center justify-center bg-background">
       <div className="w-full max-w-sm bg-card border border-border rounded-2xl p-8 space-y-4">
         <h1 className="text-2xl font-bold text-center">
           {mode === "login" ? "Admin Login" : "Request Admin Access"}

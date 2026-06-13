@@ -8,6 +8,7 @@ exports.getAllServices = async (req, res, next) => {
     const services = await prisma.service.findMany({
       orderBy: { order: "asc" },
     });
+    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
     res.json(services);
   } catch (err) {
     next(err);
@@ -27,6 +28,7 @@ exports.getServiceBySlug = async (req, res, next) => {
       return res.status(404).json({ error: "Service not found" });
     }
 
+    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
     res.json(service);
   } catch (err) {
     next(err);
