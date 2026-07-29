@@ -1,14 +1,13 @@
+"use client";
+
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { cachedFetch } from "@/lib/api-cache";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const API_BASE =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 /* ================= TYPES ================= */
 type Service = {
@@ -42,7 +41,7 @@ const ServicesSection = () => {
 
   /* ================= FETCH ================= */
   useEffect(() => {
-    cachedFetch<Service[]>(`${API_BASE}/api/services`, 5 * 60_000)
+    cachedFetch<Service[]>(`/api/services`, 5 * 60_000)
       .then(setServices)
       .catch(console.error);
   }, []);
@@ -182,7 +181,7 @@ const ServicesSection = () => {
 
                 {/* CTA */}
                 <Link
-                  to={`/services/${service.slug}`}
+                  href={`/services/${service.slug}`}
                   className="relative z-10 group inline-flex items-center gap-3 text-sm font-medium"
                   style={{ fontFamily: "var(--font-body)" }}
                 >

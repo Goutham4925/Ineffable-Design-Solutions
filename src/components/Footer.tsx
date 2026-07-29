@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { SiFacebook, SiInstagram, SiX, SiLinkedin } from "react-icons/si";
-import Logo from "./Logo";
+"use client";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { SiFacebook, SiInstagram, SiX } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa6";
+import Logo from "./Logo";
 
 type Service = { id: string; title: string; slug: string; };
 
@@ -12,7 +13,7 @@ const Footer = () => {
   const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/services`)
+    fetch(`/api/services`)
       .then((r) => r.json())
       .then((d) => setServices(Array.isArray(d) ? d : []))
       .catch(() => setServices([]));
@@ -28,7 +29,7 @@ const Footer = () => {
 
           {/* Brand */}
           <div>
-            <Link to="/" className="inline-block mb-6" aria-label="Ineffable Design Solutions">
+            <Link href="/" className="inline-block mb-6" aria-label="Ineffable Design Solutions">
               <Logo className="h-9 w-auto" />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-2">
@@ -44,7 +45,7 @@ const Footer = () => {
             {/* Social */}
             <div className="flex items-center gap-4">
               {[
-                { href: "https://www.linkedin.com/company/ineffable-design-solutions", Icon: SiLinkedin, label: "LinkedIn" },
+                { href: "https://www.linkedin.com/company/ineffable-design-solutions", Icon: FaLinkedinIn, label: "LinkedIn" },
                 { href: "https://twitter.com/ineffabledesign", Icon: SiX, label: "X (Twitter)" },
                 { href: "https://www.instagram.com/ineffabledesign", Icon: SiInstagram, label: "Instagram" },
                 { href: "https://facebook.com/ineffabledesign", Icon: SiFacebook, label: "Facebook" },
@@ -74,7 +75,7 @@ const Footer = () => {
                   <ul key={ci} className="space-y-3">
                     {col.map((s) => (
                       <li key={s.id}>
-                        <Link to={`/services/${s.slug}`} className="footer-link link-animated">
+                        <Link href={`/services/${s.slug}`} className="footer-link link-animated">
                           {s.title}
                         </Link>
                       </li>
@@ -99,7 +100,7 @@ const Footer = () => {
                 { label: "Careers", href: "/contact" },
               ].map((l) => (
                 <li key={l.label}>
-                  <Link to={l.href} className="footer-link link-animated">{l.label}</Link>
+                  <Link href={l.href} className="footer-link link-animated">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -112,8 +113,8 @@ const Footer = () => {
             &copy; {currentYear} Ineffable Design Solutions. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link to="/privacy" className="text-muted-foreground text-xs hover:text-foreground transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="text-muted-foreground text-xs hover:text-foreground transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="text-muted-foreground text-xs hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-muted-foreground text-xs hover:text-foreground transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

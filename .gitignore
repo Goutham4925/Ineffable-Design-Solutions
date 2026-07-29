@@ -16,6 +16,8 @@ node_modules/
 dist/
 dist-ssr/
 build/
+.next/
+next-env.d.ts
 
 # =====================
 # Logs

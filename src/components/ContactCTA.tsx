@@ -1,5 +1,7 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 const ContactCTA = () => {
@@ -38,7 +40,7 @@ const ContactCTA = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-start gap-6">
-              <Link to="/contact" className="btn-primary text-base px-10 py-5" data-cursor="Let's Go">
+              <Link href="/contact" className="btn-primary text-base px-10 py-5" data-cursor="Let's Go">
                 Start a Conversation
                 <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
               </Link>

@@ -1,10 +1,10 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { cachedFetch } from "@/lib/api-cache";
-
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type Service = { id: string; title: string; };
 type Project = {
@@ -29,8 +29,8 @@ const ProjectsSection = () => {
 
   useEffect(() => {
     Promise.all([
-      cachedFetch<Project[]>(`${API_BASE}/api/blogs`),
-      cachedFetch<Service[]>(`${API_BASE}/api/services`),
+      cachedFetch<Project[]>(`/api/blogs`),
+      cachedFetch<Service[]>(`/api/services`),
     ]).then(([p, s]) => {
       setProjects(p.filter((x: Project) => x.featured));
       setServices(s);
@@ -118,7 +118,7 @@ const ProjectsSection = () => {
                 className="h-scroll-item"
                 style={{ width: "min(380px, 80vw)" }}
               >
-                <Link to={`/blogs/${project.slug}`} className="block group" data-cursor="View">
+                <Link href={`/blogs/${project.slug}`} className="block group" data-cursor="View">
                   <div className="relative aspect-[3/4] overflow-hidden bg-card border border-border/60 group-hover:border-primary/30 transition-colors duration-300">
                     <div className={`absolute inset-0 bg-gradient-to-br ${colors[index % colors.length]}`} />
                     <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-colors duration-500" />
@@ -162,7 +162,7 @@ const ProjectsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <Link to={`/blogs/${project.slug}`} className="block group">
+              <Link href={`/blogs/${project.slug}`} className="block group">
                 <div className="relative aspect-[4/3] overflow-hidden bg-card border border-border/60">
                   <div className={`absolute inset-0 bg-gradient-to-br ${colors[index % colors.length]}`} />
                   {project.services[0] && (
@@ -188,7 +188,7 @@ const ProjectsSection = () => {
           transition={{ duration: 0.6 }}
           className="mt-14"
         >
-          <Link to="/blogs" className="btn-outline">
+          <Link href="/blogs" className="btn-outline">
             View All Projects
           </Link>
         </motion.div>

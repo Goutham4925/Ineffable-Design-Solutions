@@ -1,0 +1,923 @@
+<!--
+  =============================================================================
+  SCHEMA.ORG STRUCTURED DATA — Ineffable Design Solutions
+  Ready-to-inject JSON-LD script tags
+
+  HOW TO USE
+  ──────────────────────────────────────────────────────────────────────────────
+  GLOBAL BLOCK  →  paste into index.html <head> (applies to all pages)
+  PAGE BLOCKS   →  inject per-route via React Helmet / next/head / a <head>
+                   portal; only include the block that matches the current route
+  SERVICE PAGES →  each service block includes both the WebPage + Service entity
+                   AND its BreadcrumbList — inject as a single script tag
+  =============================================================================
+-->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     GLOBAL — inject once in index.html <head>
+     Covers: WebSite · Organization · LocalBusiness (ProfessionalService)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.ineffabledesignsolutions.com/#website",
+      "url": "https://www.ineffabledesignsolutions.com",
+      "name": "Ineffable Design Solutions",
+      "description": "Designing the Ineffable. Engineering the Exceptional. Full-service digital agency in Bangalore, India.",
+      "publisher": {
+        "@id": "https://www.ineffabledesignsolutions.com/#organization"
+      },
+      "inLanguage": "en-IN",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.ineffabledesignsolutions.com/blogs?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.ineffabledesignsolutions.com/#organization",
+      "name": "Ineffable Design Solutions",
+      "alternateName": "Ineffable Design",
+      "url": "https://www.ineffabledesignsolutions.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://res.cloudinary.com/dspbp48zi/image/upload/v1767711760/Frame_409_gdhwjx.png",
+        "width": 1200,
+        "height": 630
+      },
+      "image": "https://res.cloudinary.com/dspbp48zi/image/upload/v1767711760/Frame_409_gdhwjx.png",
+      "description": "Ineffable Design Solutions is a full-service digital agency combining creative excellence with technical innovation. We partner with forward-thinking brands to create digital experiences that captivate, convert, and inspire.",
+      "email": "enquiry@ineffabledesignsolutions.com",
+      "telephone": "+91-9074029499",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Indira Nagar",
+        "addressLocality": "Bangalore",
+        "addressRegion": "Karnataka",
+        "postalCode": "560038",
+        "addressCountry": "IN"
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "India" },
+        { "@type": "Country", "name": "United States" },
+        { "@type": "Country", "name": "United Kingdom" }
+      ],
+      "foundingDate": "2022",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "minValue": 2,
+        "maxValue": 20
+      },
+      "slogan": "Designing the Ineffable. Engineering the Exceptional.",
+      "knowsAbout": [
+        "Software Development",
+        "Web App Development",
+        "UI/UX Design",
+        "Branding & Identity",
+        "Digital Marketing",
+        "Motion Graphics",
+        "Product Design",
+        "AI Automation"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/ineffable-design-solutions",
+        "https://www.instagram.com/ineffabledesign",
+        "https://www.facebook.com/ineffabledesign",
+        "https://twitter.com/ineffabledesign"
+      ],
+      "founders": [
+        {
+          "@type": "Person",
+          "name": "Goutham Gokul",
+          "jobTitle": "CEO & Co-Founder",
+          "worksFor": {
+            "@id": "https://www.ineffabledesignsolutions.com/#organization"
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Nikitha Jude Vathikulam",
+          "jobTitle": "COO & Co-Founder",
+          "worksFor": {
+            "@id": "https://www.ineffabledesignsolutions.com/#organization"
+          }
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "enquiry@ineffabledesignsolutions.com",
+        "telephone": "+91-9074029499",
+        "availableLanguage": ["English"],
+        "areaServed": "IN"
+      }
+    },
+    {
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": "https://www.ineffabledesignsolutions.com/#localbusiness",
+      "name": "Ineffable Design Solutions",
+      "image": "https://res.cloudinary.com/dspbp48zi/image/upload/v1767711760/Frame_409_gdhwjx.png",
+      "url": "https://www.ineffabledesignsolutions.com",
+      "email": "enquiry@ineffabledesignsolutions.com",
+      "telephone": "+91-9074029499",
+      "description": "Full-service digital design agency in Bangalore offering software development, web app development, UI/UX design, branding, digital marketing, motion graphics, product design, and AI automation.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Indira Nagar",
+        "addressLocality": "Bangalore",
+        "addressRegion": "Karnataka",
+        "postalCode": "560038",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 12.9784,
+        "longitude": 77.6408
+      },
+      "priceRange": "$$",
+      "currenciesAccepted": "INR, USD",
+      "paymentAccepted": "Bank Transfer, UPI",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/ineffable-design-solutions",
+        "https://www.instagram.com/ineffabledesign",
+        "https://www.facebook.com/ineffabledesign",
+        "https://twitter.com/ineffabledesign"
+      ],
+      "parentOrganization": {
+        "@id": "https://www.ineffabledesignsolutions.com/#organization"
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: / (Homepage)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://www.ineffabledesignsolutions.com/#webpage",
+  "url": "https://www.ineffabledesignsolutions.com",
+  "name": "Ineffable Design Solutions | Full-Service Digital Agency",
+  "description": "Designing the Ineffable. Engineering the Exceptional. We craft exceptional digital experiences through software development, web design, branding, UI/UX, digital marketing, and AI solutions.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "about": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      }
+    ]
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /about
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://www.ineffabledesignsolutions.com/about#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/about",
+  "name": "About Us | Ineffable Design Solutions",
+  "description": "Ineffable Design Solutions is a full-service digital agency that combines creative excellence with technical innovation. Meet the team: Goutham Gokul (CEO) and Nikitha Jude Vathikulam (COO).",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "about": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "About Us",
+        "item": "https://www.ineffabledesignsolutions.com/about"
+      }
+    ]
+  },
+  "mentions": [
+    {
+      "@type": "Person",
+      "name": "Goutham Gokul",
+      "jobTitle": "CEO & Co-Founder",
+      "worksFor": {
+        "@id": "https://www.ineffabledesignsolutions.com/#organization"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Nikitha Jude Vathikulam",
+      "jobTitle": "COO & Co-Founder",
+      "worksFor": {
+        "@id": "https://www.ineffabledesignsolutions.com/#organization"
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /contact
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://www.ineffabledesignsolutions.com/contact#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/contact",
+  "name": "Contact Us | Ineffable Design Solutions",
+  "description": "Have a project in mind? Get in touch with Ineffable Design Solutions. Email us at enquiry@ineffabledesignsolutions.com or call +91 9074029499. Based in Indira Nagar, Bangalore.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Contact",
+        "item": "https://www.ineffabledesignsolutions.com/contact"
+      }
+    ]
+  },
+  "mainEntity": {
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "email": "enquiry@ineffabledesignsolutions.com",
+    "telephone": "+91-9074029499",
+    "availableLanguage": ["English"],
+    "areaServed": "IN"
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /services
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://www.ineffabledesignsolutions.com/services#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/services",
+  "name": "Our Services | Ineffable Design Solutions",
+  "description": "From concept to launch — comprehensive digital solutions including software development, web app development, UI/UX design, branding, digital marketing, motion graphics, product design, and AI automation.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Services",
+        "item": "https://www.ineffabledesignsolutions.com/services"
+      }
+    ]
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /blogs  (portfolio / projects listing)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://www.ineffabledesignsolutions.com/blogs#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/blogs",
+  "name": "Projects | Ineffable Design Solutions",
+  "description": "A showcase of our finest work — each project represents Ineffable Design Solutions' commitment to excellence, innovation, and flawless execution across software, design, and marketing.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Projects",
+        "item": "https://www.ineffabledesignsolutions.com/blogs"
+      }
+    ]
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /privacy
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://www.ineffabledesignsolutions.com/privacy#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/privacy",
+  "name": "Privacy Policy | Ineffable Design Solutions",
+  "description": "Ineffable Design Solutions is committed to protecting your privacy. Read our full privacy policy covering data collection, usage, protection, and your rights.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Privacy Policy",
+        "item": "https://www.ineffabledesignsolutions.com/privacy"
+      }
+    ]
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PAGE: /terms
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://www.ineffabledesignsolutions.com/terms#webpage",
+  "url": "https://www.ineffabledesignsolutions.com/terms",
+  "name": "Terms of Service | Ineffable Design Solutions",
+  "description": "Read the Terms of Service for Ineffable Design Solutions. Understand your rights and obligations when using our digital agency services.",
+  "inLanguage": "en-IN",
+  "isPartOf": {
+    "@id": "https://www.ineffabledesignsolutions.com/#website"
+  },
+  "publisher": {
+    "@id": "https://www.ineffabledesignsolutions.com/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.ineffabledesignsolutions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Terms of Service",
+        "item": "https://www.ineffabledesignsolutions.com/terms"
+      }
+    ]
+  }
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/software-development
+     Contains: WebPage + Service entity + BreadcrumbList
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/software-development#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/software-development",
+      "name": "Software Development Services | Ineffable Design Solutions",
+      "description": "End-to-end custom software development — from architecture and backend engineering to deployment and ongoing support. Built to scale.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Software Development", "item": "https://www.ineffabledesignsolutions.com/services/software-development" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/software-development#service",
+      "name": "Software Development",
+      "alternateName": "Custom Software Development",
+      "description": "End-to-end custom software development — from architecture and backend engineering to deployment and ongoing support. We build scalable, performant software tailored to your business needs.",
+      "url": "https://www.ineffabledesignsolutions.com/services/software-development",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Software Development",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Software Development Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Software Architecture" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Backend API Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Database Design & Optimization" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cloud Deployment & DevOps" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software Maintenance & Support" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/web-app-development
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/web-app-development#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/web-app-development",
+      "name": "Web App Development Services | Ineffable Design Solutions",
+      "description": "Modern, responsive web application development using React, Next.js, and cutting-edge frameworks. From SPAs to full-stack platforms.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Web App Development", "item": "https://www.ineffabledesignsolutions.com/services/web-app-development" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/web-app-development#service",
+      "name": "Web App Development",
+      "alternateName": "Web Application Development",
+      "description": "Modern, responsive web application development using React, Next.js, and cutting-edge frameworks. We build SPAs, full-stack platforms, and progressive web apps that perform flawlessly.",
+      "url": "https://www.ineffabledesignsolutions.com/services/web-app-development",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Web Development",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Web App Development Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Single Page Application (SPA) Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full-Stack Web Platform Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Progressive Web App (PWA) Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "API Integration & Third-Party Services" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Performance Optimization & Accessibility" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/ui-ux-design
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/ui-ux-design#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/ui-ux-design",
+      "name": "UI/UX Design Services | Ineffable Design Solutions",
+      "description": "User-centred interface and experience design that captivates and converts. Research-led, pixel-perfect design systems built for real products.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "UI/UX Design", "item": "https://www.ineffabledesignsolutions.com/services/ui-ux-design" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/ui-ux-design#service",
+      "name": "UI/UX Design",
+      "alternateName": "User Interface & User Experience Design",
+      "description": "User-centred interface and experience design that captivates and converts. We deliver research-led wireframes, prototypes, and pixel-perfect design systems built for real digital products.",
+      "url": "https://www.ineffabledesignsolutions.com/services/ui-ux-design",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "UI/UX Design",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "UI/UX Design Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "User Research & Persona Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wireframing & Prototyping" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Design System Creation" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Usability Testing" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Interaction & Motion Design" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/branding-identity
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/branding-identity#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/branding-identity",
+      "name": "Branding & Identity Services | Ineffable Design Solutions",
+      "description": "Strategic brand identity design — logos, visual systems, brand guidelines, and messaging that make your business unforgettable.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Branding & Identity", "item": "https://www.ineffabledesignsolutions.com/services/branding-identity" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/branding-identity#service",
+      "name": "Branding & Identity",
+      "alternateName": "Brand Identity Design",
+      "description": "Strategic brand identity design that makes your business unforgettable. We craft logos, visual systems, brand guidelines, colour palettes, typography, and complete messaging frameworks.",
+      "url": "https://www.ineffabledesignsolutions.com/services/branding-identity",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Branding & Identity Design",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Branding & Identity Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Logo Design & Brand Mark" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Strategy & Positioning" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Visual Identity System" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Guidelines & Style Guide" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Stationery & Collateral Design" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/digital-marketing
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/digital-marketing#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/digital-marketing",
+      "name": "Digital Marketing Services | Ineffable Design Solutions",
+      "description": "Data-driven digital marketing strategies — SEO, social media, content marketing, and paid campaigns — that grow your brand and drive measurable results.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Digital Marketing", "item": "https://www.ineffabledesignsolutions.com/services/digital-marketing" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/digital-marketing#service",
+      "name": "Digital Marketing",
+      "alternateName": "Digital Marketing & Growth",
+      "description": "Data-driven digital marketing strategies that grow your brand and drive measurable results. Services span SEO, social media management, content marketing, and paid advertising campaigns.",
+      "url": "https://www.ineffabledesignsolutions.com/services/digital-marketing",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Digital Marketing",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Digital Marketing Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Search Engine Optimisation (SEO)" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Social Media Management" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Content Marketing & Strategy" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Paid Advertising (PPC / Meta Ads)" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Email Marketing & Automation" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/motion-graphics
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/motion-graphics#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/motion-graphics",
+      "name": "Motion Graphics Services | Ineffable Design Solutions",
+      "description": "Compelling motion graphics and animation — from brand explainer videos to UI micro-animations — that bring your brand story to life.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Motion Graphics", "item": "https://www.ineffabledesignsolutions.com/services/motion-graphics" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/motion-graphics#service",
+      "name": "Motion Graphics",
+      "alternateName": "Motion Design & Animation",
+      "description": "Compelling motion graphics and animation that bring your brand story to life. We produce brand explainer videos, UI micro-animations, social media reels, and broadcast-ready motion assets.",
+      "url": "https://www.ineffabledesignsolutions.com/services/motion-graphics",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Motion Graphics & Animation",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Motion Graphics Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Explainer Videos" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UI Micro-Animation" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Social Media Motion Content" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Logo Animation & Sting" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Infographic & Data Animation" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/product-design
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/product-design#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/product-design",
+      "name": "Product Design Services | Ineffable Design Solutions",
+      "description": "End-to-end digital product design — from discovery and strategy through wireframes, prototypes, and launch-ready design specifications.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "Product Design", "item": "https://www.ineffabledesignsolutions.com/services/product-design" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/product-design#service",
+      "name": "Product Design",
+      "alternateName": "Digital Product Design",
+      "description": "End-to-end digital product design from discovery and strategy through wireframes, high-fidelity prototypes, and launch-ready design specifications that development teams love to work from.",
+      "url": "https://www.ineffabledesignsolutions.com/services/product-design",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "Product Design",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Product Design Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Product Strategy & Roadmapping" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Information Architecture" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "High-Fidelity UI Prototyping" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Design-to-Developer Handoff" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Post-Launch Iteration & Testing" } }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SERVICE PAGE: /services/ai-automation
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.ineffabledesignsolutions.com/services/ai-automation#webpage",
+      "url": "https://www.ineffabledesignsolutions.com/services/ai-automation",
+      "name": "AI Automation Services | Ineffable Design Solutions",
+      "description": "Custom AI solutions and intelligent automation that streamline workflows, reduce operational overhead, and give your business a competitive edge.",
+      "inLanguage": "en-IN",
+      "isPartOf": { "@id": "https://www.ineffabledesignsolutions.com/#website" },
+      "publisher": { "@id": "https://www.ineffabledesignsolutions.com/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.ineffabledesignsolutions.com" },
+          { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.ineffabledesignsolutions.com/services" },
+          { "@type": "ListItem", "position": 3, "name": "AI Automation", "item": "https://www.ineffabledesignsolutions.com/services/ai-automation" }
+        ]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.ineffabledesignsolutions.com/services/ai-automation#service",
+      "name": "AI Automation",
+      "alternateName": "Artificial Intelligence & Automation Solutions",
+      "description": "Custom AI solutions and intelligent automation that streamline workflows, reduce operational overhead, and give your business a competitive edge. From LLM integrations to computer-vision pipelines.",
+      "url": "https://www.ineffabledesignsolutions.com/services/ai-automation",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.ineffabledesignsolutions.com/#organization",
+        "name": "Ineffable Design Solutions",
+        "url": "https://www.ineffabledesignsolutions.com"
+      },
+      "serviceType": "AI & Automation",
+      "areaServed": { "@type": "Country", "name": "India" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "AI Automation Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "LLM Integration & Prompt Engineering" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workflow Automation & RPA" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Chatbot & Conversational Agent Development" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Data Pipeline & ML Model Integration" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Computer Vision Solutions" } }
+        ]
+      }
+    }
+  ]
+}
+</script>

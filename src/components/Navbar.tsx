@@ -1,5 +1,8 @@
+"use client";
+
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
@@ -17,7 +20,7 @@ const navItems = [
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => {
@@ -26,7 +29,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [location.pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
@@ -47,7 +50,7 @@ const Navbar = () => {
       >
         <div className="container-wide flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group z-10" aria-label="Ineffable Design Solutions home">
+          <Link href="/" className="flex items-center gap-3 group z-10" aria-label="Ineffable Design Solutions home">
             <Logo className="h-8 w-auto" />
           </Link>
 
@@ -56,9 +59,9 @@ const Navbar = () => {
             {navItems.map((item) => (
               <li key={item.label}>
                 <Link
-                  to={item.href}
+                  href={item.href}
                   className={`link-animated text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-200 ${
-                    location.pathname === item.href
+                    pathname === item.href
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
@@ -74,7 +77,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <MagneticElement strength={0.25} className="hidden sm:inline-block">
               <Link
-                to="/contact"
+                href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-medium tracking-widest uppercase border border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 style={{ fontFamily: "var(--font-body)" }}
               >
@@ -134,10 +137,10 @@ const Navbar = () => {
                       transition={{ duration: 0.4, delay: i * 0.06 }}
                     >
                       <Link
-                        to={item.href}
+                        href={item.href}
                         onClick={() => setIsMenuOpen(false)}
                         className={`block py-3 text-4xl font-light transition-colors ${
-                          location.pathname === item.href ? "text-primary" : "text-foreground hover:text-primary"
+                          pathname === item.href ? "text-primary" : "text-foreground hover:text-primary"
                         }`}
                         style={{ fontFamily: "var(--font-display)" }}
                       >
@@ -150,7 +153,7 @@ const Navbar = () => {
 
               <div className="px-6 py-8 border-t border-border">
                 <Link
-                  to="/contact"
+                  href="/contact"
                   onClick={() => setIsMenuOpen(false)}
                   className="btn-primary w-full justify-center"
                 >

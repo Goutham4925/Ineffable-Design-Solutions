@@ -1,5 +1,7 @@
+"use client";
+
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import MagneticElement from "./MagneticElement";
@@ -113,12 +115,12 @@ const HeroSection = () => {
 
             <div className="flex items-center gap-4">
               <MagneticElement strength={0.3}>
-                <Link to="/contact" className="btn-primary" data-cursor="Let's Talk">
+                <Link href="/contact" className="btn-primary" data-cursor="Let's Talk">
                   Start a Project
                 </Link>
               </MagneticElement>
               <MagneticElement strength={0.3}>
-                <Link to="/about" className="btn-outline" data-cursor="Explore">
+                <Link href="/about" className="btn-outline" data-cursor="Explore">
                   Our Work <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                 </Link>
               </MagneticElement>

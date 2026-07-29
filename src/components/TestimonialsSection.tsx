@@ -1,8 +1,8 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { cachedFetch } from "@/lib/api-cache";
-
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type Testimonial = {
   id: string;
@@ -23,7 +23,7 @@ const TestimonialsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    cachedFetch<Testimonial[]>(`${API_BASE}/api/testimonials`)
+    cachedFetch<Testimonial[]>(`/api/testimonials`)
       .then((d) => setTestimonials(Array.isArray(d) ? d : []))
       .catch(console.error)
       .finally(() => setLoading(false));

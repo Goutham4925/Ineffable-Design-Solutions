@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll } from "framer-motion";
 
 const ScrollProgress = () => {
