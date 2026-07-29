@@ -18,8 +18,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Fire email — don't block response if it fails
-    sendContactNotification({ name, email, phone, subject, message }).catch((err) =>
+    // Vercel serverless functions freeze right after the response is sent —
+    // a fire-and-forget promise here would get killed before it completes.
+    // Must await, even though a failed send shouldn't fail the request.
+    await sendContactNotification({ name, email, phone, subject, message }).catch((err) =>
       console.error("[mailer] failed to send notification:", err.message)
     );
 
