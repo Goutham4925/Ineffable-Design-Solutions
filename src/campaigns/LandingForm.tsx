@@ -3,13 +3,24 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { CampaignConfig } from "./types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const BUDGET_OPTIONS = [
   "Not sure yet",
-  "Basic site (1–5 pages)",
-  "Business site with CMS",
-  "E-commerce / booking",
-  "Custom web app",
+  "Website — Basic site (1–5 pages)",
+  "Website — Business site with CMS",
+  "Website — E-commerce / booking",
+  "Website — Custom web app",
+  "Digital Marketing",
+  "Performance Marketing",
+  "AI Automation",
+  "Branding & Design",
 ];
 
 interface Props {
@@ -101,13 +112,28 @@ const LandingForm = ({ campaign }: Props) => {
       </div>
       <div>
         <label htmlFor="budget" className="label-small block mb-2">What do you need?</label>
-        <select
-          id="budget" name="budget" value={formData.budget}
-          onChange={handleChange}
-          className={`${inputClass} cursor-pointer`}
+        <Select
+          value={formData.budget}
+          onValueChange={(value) => setFormData({ ...formData, budget: value })}
         >
-          {BUDGET_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-        </select>
+          <SelectTrigger
+            id="budget"
+            className="w-full h-auto px-4 py-3 bg-background/60 border-border/60 rounded-md focus:border-primary focus:ring-0 text-foreground text-sm"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border/60">
+            {BUDGET_OPTIONS.map((opt) => (
+              <SelectItem
+                key={opt}
+                value={opt}
+                className="text-sm text-foreground focus:bg-primary/15 focus:text-primary data-[state=checked]:text-primary cursor-pointer"
+              >
+                {opt}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <button
         type="submit"
